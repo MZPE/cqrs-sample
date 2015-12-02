@@ -40,7 +40,7 @@ het adres zal een *VerhuisDeelnemer* command worden verstuurd. Dit zal worden
 verwerkt en zal leiden tot de publicatie van een *DeelnemerVerhuisd* event. Dit 
 event zal weer worden opgepakt door de UI.DeelnemerBeheer applicatie en de data 
 zal worden bijgewerkt in de database. Daarna wordt het overzichtscherm met 
-deelnemers worden ververst met de nieuwste gegevens. Het event zal tevens worden 
+deelnemers ververst met de nieuwste gegevens. Het event zal tevens worden 
 opgepakt door de Application.Correspondentie applicatie. Deze applicatie zal op 
 basis van de gegevens van de deelnemer (en het nieuwe adres) een brief aanmaken 
 waarin de desbetreffende deelnemer op de hoogte wordt gebracht van het feit dat 
@@ -354,11 +354,11 @@ houden. In het auditlog moeten alle events langekomen. In de 3 UI applicaties
 moeten Deelnemers, Werkgevers en Arbeidsverhoudingen verschijnen en in de 
 AuditLog en EventStore folders moeten bestanden verschijnen.  
 
-Door in UI.Delnemer en deelnemer te selecteren en dan uit het menu de optie 
+Door in UI.Deelnemer en deelnemer te selecteren en dan uit het menu de optie 
 'Deelnemer' en vervolgens de optie 'Verhuis' te kiezen, kan een nieuw adres 
 worden ingevoerd. Als dit wordt bevestigd moet in het 
 Application.Correspondentie window een melding verschijnen dat er een brief 
-i.v.m. verhuizing is verzonden. In de Corespondentie folder moet vervolgens ook 
+i.v.m. verhuizing is verzonden. In de Correspondentie folder moet vervolgens ook 
 een PDF bestand zijn verscheven met daarin de gegevens van de deelnemer en 
 informatie over de verhuizing (bestandsnaam begint met de datum en tijd gevolgd 
 door de naam van de deelnemer).
