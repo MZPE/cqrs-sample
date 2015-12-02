@@ -354,7 +354,7 @@ houden. In het auditlog moeten alle events langekomen. In de 3 UI applicaties
 moeten Deelnemers, Werkgevers en Arbeidsverhoudingen verschijnen en in de 
 AuditLog en EventStore folders moeten bestanden verschijnen.  
 
-Door in UI.Delnemer en deelnemer te selecteren en dan uit het menu de optie 
+Door in UI.Deelnemer en deelnemer te selecteren en dan uit het menu de optie 
 'Deelnemer' en vervolgens de optie 'Verhuis' te kiezen, kan een nieuw adres 
 worden ingevoerd. Als dit wordt bevestigd moet in het 
 Application.Correspondentie window een melding verschijnen dat er een brief 
