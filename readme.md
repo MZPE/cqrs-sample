@@ -40,7 +40,7 @@ het adres zal een *VerhuisDeelnemer* command worden verstuurd. Dit zal worden
 verwerkt en zal leiden tot de publicatie van een *DeelnemerVerhuisd* event. Dit 
 event zal weer worden opgepakt door de UI.DeelnemerBeheer applicatie en de data 
 zal worden bijgewerkt in de database. Daarna wordt het overzichtscherm met 
-deelnemers worden ververst met de nieuwste gegevens. Het event zal tevens worden 
+deelnemers ververst met de nieuwste gegevens. Het event zal tevens worden 
 opgepakt door de Application.Correspondentie applicatie. Deze applicatie zal op 
 basis van de gegevens van de deelnemer (en het nieuwe adres) een brief aanmaken 
 waarin de desbetreffende deelnemer op de hoogte wordt gebracht van het feit dat 
