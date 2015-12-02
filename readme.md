@@ -358,7 +358,7 @@ Door in UI.Deelnemer en deelnemer te selecteren en dan uit het menu de optie
 'Deelnemer' en vervolgens de optie 'Verhuis' te kiezen, kan een nieuw adres 
 worden ingevoerd. Als dit wordt bevestigd moet in het 
 Application.Correspondentie window een melding verschijnen dat er een brief 
-i.v.m. verhuizing is verzonden. In de Corespondentie folder moet vervolgens ook 
+i.v.m. verhuizing is verzonden. In de Correspondentie folder moet vervolgens ook 
 een PDF bestand zijn verscheven met daarin de gegevens van de deelnemer en 
 informatie over de verhuizing (bestandsnaam begint met de datum en tijd gevolgd 
 door de naam van de deelnemer).
