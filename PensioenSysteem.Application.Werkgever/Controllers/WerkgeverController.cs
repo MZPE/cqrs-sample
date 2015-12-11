@@ -1,4 +1,5 @@
-﻿using PensioenSysteem.Domain.Werkgever.Commands;
+﻿using PensioenSysteem.Domain.Core;
+using PensioenSysteem.Domain.Werkgever.Commands;
 using PensioenSysteem.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,17 @@ namespace PensioenSysteem.Application.Deelnemer.Controllers
 {
     public class WerkgeverController : ApiController
     {
+        private IAggregateRepository<PensioenSysteem.Domain.Werkgever.Werkgever> _repo;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="repo">The repository to use for storing and retrieving aggregates.</param>
+        public WerkgeverController(IAggregateRepository<PensioenSysteem.Domain.Werkgever.Werkgever> repo)
+        {
+            _repo = repo;
+        }
+
         /// <summary>
         /// POST /api/werkgever
         /// </summary>
@@ -22,11 +34,7 @@ namespace PensioenSysteem.Application.Deelnemer.Controllers
         {
             var werkgever = new PensioenSysteem.Domain.Werkgever.Werkgever();
             werkgever.Registreer(command);
-
-            var repo = new EventSourcedAggregateRepository<PensioenSysteem.Domain.Werkgever.Werkgever>(
-                new FileEventStore(new RabbitMQEventPublisher()));
-            repo.Save(werkgever, -1);
-
+            _repo.Save(werkgever, -1);
             return new HttpResponseMessage(HttpStatusCode.Created);
         }
 
@@ -37,9 +45,7 @@ namespace PensioenSysteem.Application.Deelnemer.Controllers
         [Route("api/werkgever/{id}")]
         public Domain.Werkgever.Werkgever Get(Guid id)
         {
-            var repo = new EventSourcedAggregateRepository<PensioenSysteem.Domain.Werkgever.Werkgever>(
-                new FileEventStore(new RabbitMQEventPublisher()));
-            var werkgever = repo.GetById(id);
+            var werkgever = _repo.GetById(id);
             return werkgever;
         }
     }

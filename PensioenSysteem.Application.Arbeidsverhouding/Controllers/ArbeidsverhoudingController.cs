@@ -1,4 +1,5 @@
 ﻿using PensioenSysteem.Domain.Arbeidsverhouding.Commands;
+using PensioenSysteem.Domain.Core;
 using PensioenSysteem.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,17 @@ namespace PensioenSysteem.Application.Deelnemer.Controllers
 {
     public class ArbeidsverhoudingController : ApiController
     {
+        private IAggregateRepository<PensioenSysteem.Domain.Arbeidsverhouding.Arbeidsverhouding> _repo;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="repo">The repository to use for storing and retrieving aggregates.</param>
+        public ArbeidsverhoudingController(IAggregateRepository<PensioenSysteem.Domain.Arbeidsverhouding.Arbeidsverhouding> repo)
+        {
+            _repo = repo;
+        }
+
         /// <summary>
         /// POST /api/arbeidsverhouding
         /// </summary>
@@ -22,11 +34,7 @@ namespace PensioenSysteem.Application.Deelnemer.Controllers
         {
             var arbeidsverhouding = new PensioenSysteem.Domain.Arbeidsverhouding.Arbeidsverhouding();
             arbeidsverhouding.Registreer(command);
-
-            var repo = new EventSourcedAggregateRepository<PensioenSysteem.Domain.Arbeidsverhouding.Arbeidsverhouding>(
-                new FileEventStore(new RabbitMQEventPublisher()));
-            repo.Save(arbeidsverhouding, -1);
-
+            _repo.Save(arbeidsverhouding, -1);
             return new HttpResponseMessage(HttpStatusCode.Created);
         }
 
@@ -39,9 +47,7 @@ namespace PensioenSysteem.Application.Deelnemer.Controllers
         [Route("api/arbeidsverhouding/{id}")]
         public Domain.Arbeidsverhouding.Arbeidsverhouding Get(Guid id)
         {
-            var repo = new EventSourcedAggregateRepository<PensioenSysteem.Domain.Arbeidsverhouding.Arbeidsverhouding>(
-                new FileEventStore(new RabbitMQEventPublisher()));
-            var arbeidsverhouding = repo.GetById(id);
+            var arbeidsverhouding = _repo.GetById(id);
             return arbeidsverhouding;
         }
     }
