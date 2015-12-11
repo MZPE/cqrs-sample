@@ -1,4 +1,5 @@
-﻿using PensioenSysteem.Domain.Deelnemer.Commands;
+﻿using PensioenSysteem.Domain.Core;
+using PensioenSysteem.Domain.Deelnemer.Commands;
 using PensioenSysteem.Infrastructure;
 using System;
 using System.Net;
@@ -9,6 +10,17 @@ namespace PensioenSysteem.Application.Deelnemer.Controllers
 {
     public class DeelnemerController : ApiController
     {
+        private IAggregateRepository<PensioenSysteem.Domain.Deelnemer.Deelnemer> _repo;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="repo">The repository to use for storing and retrieving aggregates.</param>
+        public DeelnemerController(IAggregateRepository<PensioenSysteem.Domain.Deelnemer.Deelnemer> repo)
+        {
+            _repo = repo;
+        }
+
         /// <summary>
         /// POST /api/deelnemer
         /// </summary>
@@ -20,11 +32,7 @@ namespace PensioenSysteem.Application.Deelnemer.Controllers
         {
             var deelnemer = new PensioenSysteem.Domain.Deelnemer.Deelnemer();
             deelnemer.Registreer(command);
-
-            var repo = new EventSourcedAggregateRepository<PensioenSysteem.Domain.Deelnemer.Deelnemer>(
-                new FileEventStore(new RabbitMQEventPublisher()));
-            repo.Save(deelnemer, -1);
-
+            _repo.Save(deelnemer, -1);
             return new HttpResponseMessage(HttpStatusCode.Created);
         }
 
@@ -37,13 +45,10 @@ namespace PensioenSysteem.Application.Deelnemer.Controllers
         [Route("api/deelnemer/{id}/verhuis")]
         public HttpResponseMessage Verhuis(Guid id, [FromBody] VerhuisDeelnemerCommand command)
         {
-            var repo = new EventSourcedAggregateRepository<PensioenSysteem.Domain.Deelnemer.Deelnemer>(
-                new FileEventStore(new RabbitMQEventPublisher()));
-
             Domain.Deelnemer.Deelnemer deelnemer;
             try
             {
-                deelnemer = repo.GetById(id);
+                deelnemer = _repo.GetById(id);
             }
             catch (AggregateNotFoundException ex)
             {
@@ -52,7 +57,7 @@ namespace PensioenSysteem.Application.Deelnemer.Controllers
 
             deelnemer.Verhuis(command);
             
-            repo.Save(deelnemer, command.Version);
+            _repo.Save(deelnemer, command.Version);
 
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
@@ -64,9 +69,7 @@ namespace PensioenSysteem.Application.Deelnemer.Controllers
         [Route("api/deelnemer/{id}")]
         public Domain.Deelnemer.Deelnemer Get(Guid id)
         {
-            var repo = new EventSourcedAggregateRepository<PensioenSysteem.Domain.Deelnemer.Deelnemer>(
-                new FileEventStore(new RabbitMQEventPublisher()));
-            var deelnemer = repo.GetById(id);
+            var deelnemer = _repo.GetById(id);
             return deelnemer;
         }
     }

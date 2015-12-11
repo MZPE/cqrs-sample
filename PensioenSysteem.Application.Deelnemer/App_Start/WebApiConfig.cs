@@ -9,6 +9,9 @@ namespace PensioenSysteem.Application.Deelnemer
     {
         public static void Register(HttpConfiguration config)
         {
+            // register Unity as DI container
+            UnityConfig.RegisterComponents();
+
             // Web API configuration and services
             var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
             json.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented; 
