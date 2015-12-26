@@ -20,8 +20,8 @@ namespace PensioenSysteem.Application.Correspondentie
     {
         static Deelnemer _deelnemer;
         static DeelnemerVerhuisd _event;
-        static double _positionX = 50;
-        static double _positionY = 50;
+        static double _positionX;
+        static double _positionY;
         static XFont _titelFont = new XFont("Verdana", 14, XFontStyle.Bold);
         static XFont _font = new XFont("Verdana", 11, XFontStyle.Regular);
         static XFont _fontBold = new XFont("Verdana", 11, XFontStyle.Bold);
@@ -33,6 +33,10 @@ namespace PensioenSysteem.Application.Correspondentie
         {
             _deelnemer = deelnemer;
             _event = deelnemerVerhuisd;
+
+            // reset page position
+            _positionX = 50;
+            _positionY = 50;
 
             // start pdf document
             _document = new PdfDocument();
