@@ -233,9 +233,8 @@ De volgende producten en frameworks zijn ingezet binnen de applicatie:
   verwerken van commands.
 * ASP.NET Web API Client - voor het aanroepen van de REST API's.
 * Newtonsoft JSon.NET - voor de serializatie van gegevens naar JSON.
-* Dapper - voor data-access.
 * RabbitMQ - voor het publiceren van events.
-* RavenDB - embedded Document Database voor het opslaan van gegevens voor de 
+* RavenDB - embedded document-database voor het opslaan van gegevens voor de 
   readmodels van de verschillende onderdelen.
 * PDFSharp - voor het genereren van brieven.
 
