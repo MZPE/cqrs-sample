@@ -1,17 +1,14 @@
-﻿using Dapper;
+﻿using AutoMapper;
 using Newtonsoft.Json;
-using PensioenSysteem.Domain.Werkgever.Events;
+using PensioenSysteem.Domain.Messages.Werkgever.Events;
 using PensioenSysteem.Infrastructure;
+using PensioenSysteem.UI.WerkgeverBeheer.Model;
+using Raven.Client;
+using Raven.Client.Embedded;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PensioenSysteem.UI.WerkgeverBeheer
@@ -19,15 +16,40 @@ namespace PensioenSysteem.UI.WerkgeverBeheer
     public partial class Form1 : Form
     {
         private RabbitMQDomainEventHandler _eventHandler;
+        private EmbeddableDocumentStore _documentStore;
+        private IMapper _werkgeverGeregistreerdToWerkgeverMapper;
 
         public Form1()
         {
             InitializeComponent();
+            InitializeDatastore();
+            InitializeMappers();
+        }
+
+        private void InitializeMappers()
+        {
+            var config = new MapperConfiguration(cfg =>
+                cfg.CreateMap<WerkgeverGeregistreerd, Werkgever>()
+                    .ForMember(dest => dest.VestigingsAdresStraat, opt => opt.MapFrom(src => src.Straat))
+                    .ForMember(dest => dest.VestigingsAdresHuisnummer, opt => opt.MapFrom(src => src.Huisnummer))
+                    .ForMember(dest => dest.VestigingsAdresHuisnummerToevoeging, opt => opt.MapFrom(src => src.HuisnummerToevoeging))
+                    .ForMember(dest => dest.VestigingsAdresPostcode, opt => opt.MapFrom(src => src.Postcode))
+                    .ForMember(dest => dest.VestigingsAdresPlaats, opt => opt.MapFrom(src => src.Plaats)));
+            _werkgeverGeregistreerdToWerkgeverMapper = config.CreateMapper();
+        }
+
+        private void InitializeDatastore()
+        {
+            _documentStore = new EmbeddableDocumentStore
+            {
+                DefaultDatabase = "WerkgeverBeheer"
+            };
+            _documentStore.Initialize();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.werkgeverTableAdapter.Fill(this.werkgeverBeheerDataSet.Werkgever);
+            UpdateList();
 
             _eventHandler = new RabbitMQDomainEventHandler("127.0.0.1", "cqrs_user", "SeeQueErEs", "PensioenSysteem.Werkgever", HandleEvent);
             _eventHandler.Start();
@@ -47,9 +69,7 @@ namespace PensioenSysteem.UI.WerkgeverBeheer
             // refresh datagrid
             this.Invoke((MethodInvoker)delegate
             {
-                this.werkgeverBindingSource.SuspendBinding();
-                this.werkgeverTableAdapter.Fill(this.werkgeverBeheerDataSet.Werkgever);
-                this.werkgeverBindingSource.ResumeBinding();
+                UpdateList();
             });
 
             return handled;
@@ -57,14 +77,11 @@ namespace PensioenSysteem.UI.WerkgeverBeheer
 
         private bool HandleEvent(WerkgeverGeregistreerd e)
         {
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["WerkgeverBeheer"].ConnectionString))
+            using (IDocumentSession session = _documentStore.OpenSession())
             {
-                string commandText = @"
-                    INSERT INTO [dbo].[Werkgever] ([Nummer], [Version], [BedrijfsNaam], [NaamContactpersoon], [EmailAdres], [VestigingsAdresStraat], [VestigingsAdresHuisnummer], 
-                                                   [VestigingsAdresHuisnummerToevoeging], [VestigingsAdresPostcode], [VestigingsAdresPlaats], [Id])
-                    VALUES (@Nummer, @Version, @BedrijfsNaam, @NaamContactpersoon, @EmailAdres, @Straat, @Huisnummer, @HuisnummerToevoeging, @Postcode, @Plaats, @Id)";
-                CommandDefinition cmd = new CommandDefinition(commandText, e);
-                connection.Execute(cmd);
+                Werkgever werkgever = _werkgeverGeregistreerdToWerkgeverMapper.Map<Werkgever>(e);
+                session.Store(werkgever);
+                session.SaveChanges();
             }
             return true;
         }
@@ -79,14 +96,32 @@ namespace PensioenSysteem.UI.WerkgeverBeheer
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.werkgeverBindingSource.SuspendBinding();
-            this.werkgeverTableAdapter.Fill(this.werkgeverBeheerDataSet.Werkgever);
-            this.werkgeverBindingSource.ResumeBinding();
+            UpdateList();
         }
 
         private void werkgeverBindingSource_ListChanged(object sender, ListChangedEventArgs e)
         {
             recordCountStatusLabel.Text = "Aantal items : " + this.werkgeverBindingSource.List.Count;
+        }
+
+        private void UpdateList()
+        {
+            this.werkgeverBindingSource.SuspendBinding();
+            this.werkgeverBindingSource.List.Clear();
+
+            using (IDocumentSession session = _documentStore.OpenSession())
+            {
+                List<Werkgever> werkgevers = session
+                    .Query<Werkgever>()
+                    .Customize(x => x.WaitForNonStaleResultsAsOfNow()) // wait for any pending index udpates
+                    .ToList();
+                foreach (Werkgever werkgever in werkgevers)
+                {
+                    this.werkgeverBindingSource.List.Add(werkgever);
+                }
+            }
+
+            this.werkgeverBindingSource.ResumeBinding();
         }
     }
 }

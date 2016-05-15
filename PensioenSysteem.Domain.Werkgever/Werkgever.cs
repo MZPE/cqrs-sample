@@ -1,11 +1,7 @@
 ﻿using PensioenSysteem.Domain.Core;
-using PensioenSysteem.Domain.Werkgever.Commands;
-using PensioenSysteem.Domain.Werkgever.Events;
+using PensioenSysteem.Domain.Messages.Werkgever.Commands;
+using PensioenSysteem.Domain.Messages.Werkgever.Events;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PensioenSysteem.Domain.Werkgever
 {

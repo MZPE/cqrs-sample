@@ -1,11 +1,7 @@
-﻿using PensioenSysteem.Domain.Arbeidsverhouding.Commands;
-using PensioenSysteem.Domain.Arbeidsverhouding.Events;
-using PensioenSysteem.Domain.Core;
+﻿using PensioenSysteem.Domain.Core;
+using PensioenSysteem.Domain.Messages.Arbeidsverhouding.Commands;
+using PensioenSysteem.Domain.Messages.Arbeidsverhouding.Events;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PensioenSysteem.Domain.Arbeidsverhouding
 {

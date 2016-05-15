@@ -1,57 +1,64 @@
-﻿using Dapper;
+﻿using AutoMapper;
 using PensioenSysteem.Application.Correspondentie.Model;
-using PensioenSysteem.Domain.Deelnemer.Events;
+using PensioenSysteem.Domain.Messages.Deelnemer.Events;
+using Raven.Client;
+using Raven.Client.Embedded;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PensioenSysteem.Application.Correspondentie
 {
-    static class DeelnemerRepository
+    internal class DeelnemerRepository
     {
-        public static void RegistreerDeelnemer(DeelnemerGeregistreerd deelnemerGeregistreerd)
-        {
-            Deelnemer deelnemer = new Deelnemer
-            {
-                Id = deelnemerGeregistreerd.Id,
-                Nummer = deelnemerGeregistreerd.Nummer,
-                Naam = deelnemerGeregistreerd.Naam,
-                EmailAdres = deelnemerGeregistreerd.EmailAdres,
-                Straat = deelnemerGeregistreerd.Straat,
-                Huisnummer = deelnemerGeregistreerd.Huisnummer,
-                HuisnummerToevoeging = deelnemerGeregistreerd.HuisnummerToevoeging,
-                Postcode = deelnemerGeregistreerd.Postcode,
-                Plaats = deelnemerGeregistreerd.Plaats
-            };
+        private EmbeddableDocumentStore _documentStore;
+        private IMapper _deelnemerGeregistreerdToDeelnemerMapper;
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public DeelnemerRepository()
+        {
+            InitializeDatastore();
+            InitializeMappers();
+        }
+
+        public void RegistreerDeelnemer(DeelnemerGeregistreerd deelnemerGeregistreerd)
+        {
+            Deelnemer deelnemer = _deelnemerGeregistreerdToDeelnemerMapper.Map<Deelnemer>(deelnemerGeregistreerd);
             RegistreerDeelnemer(deelnemer);
         }
 
-        public static void RegistreerDeelnemer(Deelnemer deelnemer)
+        public void RegistreerDeelnemer(Deelnemer deelnemer)
         {
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Correspondentie"].ConnectionString))
+            using (IDocumentSession session = _documentStore.OpenSession())
             {
-                string commandText = @"
-                    INSERT INTO [dbo].[Deelnemer] ([Id], [Nummer], [Naam], [EmailAdres], [Straat], [Huisnummer], 
-                                                   [HuisnummerToevoeging], [Postcode], [Plaats])
-                    VALUES (@id, @Nummer, @Naam, @EmailAdres, @Straat, @Huisnummer, @HuisnummerToevoeging, @Postcode, @Plaats)";
-                CommandDefinition cmd = new CommandDefinition(commandText, deelnemer);
-                connection.Execute(cmd);
+                session.Store(deelnemer);
+                session.SaveChanges();
             }
         }
 
-        public static Deelnemer RaadpleegDeelnemer(Guid id)
+        public Deelnemer RaadpleegDeelnemer(Guid id)
         {
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Correspondentie"].ConnectionString))
+            using (IDocumentSession session = _documentStore.OpenSession())
             {
-                return connection.Query<Deelnemer>(
-                    "SELECT * FROM Deelnemer WHERE id = @id",
-                    new { id }).FirstOrDefault();
+                Deelnemer deelnemer = session.Load<Deelnemer>($"deelnemers/{id.ToString("D")}");
+                return deelnemer;
             }
+        }
+
+        private void InitializeDatastore()
+        {
+            _documentStore = new EmbeddableDocumentStore
+            {
+                DefaultDatabase = "Correspondentie"
+            };
+            _documentStore.Initialize();
+        }
+
+        private void InitializeMappers()
+        {
+            var config = new MapperConfiguration(cfg =>
+               cfg.CreateMap<DeelnemerGeregistreerd, Deelnemer>());
+            _deelnemerGeregistreerdToDeelnemerMapper = config.CreateMapper();
         }
     }
 }

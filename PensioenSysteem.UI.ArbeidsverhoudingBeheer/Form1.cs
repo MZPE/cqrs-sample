@@ -1,17 +1,17 @@
-﻿using Dapper;
+﻿using AutoMapper;
+using Dapper;
 using Newtonsoft.Json;
-using PensioenSysteem.Domain.Arbeidsverhouding.Events;
+using PensioenSysteem.Domain.Messages.Arbeidsverhouding.Events;
 using PensioenSysteem.Infrastructure;
+using PensioenSysteem.UI.ArbeidsverhoudingBeheer.Model;
+using Raven.Client;
+using Raven.Client.Embedded;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
-using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PensioenSysteem.UI.ArbeidsverhoudingBeheer
@@ -19,15 +19,19 @@ namespace PensioenSysteem.UI.ArbeidsverhoudingBeheer
     public partial class Form1 : Form
     {
         private RabbitMQDomainEventHandler _eventHandler;
+        private EmbeddableDocumentStore _documentStore;
+        private IMapper _arbeidsverhoudingGeregistreerdToArbeidsverhoudingMapper;
 
         public Form1()
         {
             InitializeComponent();
+            InitializeDatastore();
+            InitializeMappers();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.arbeidsverhoudingTableAdapter.Fill(this.arbeidsverhoudingBeheerDataSet.Arbeidsverhouding);
+            UpdateList();
 
             _eventHandler = new RabbitMQDomainEventHandler("127.0.0.1", "cqrs_user", "SeeQueErEs", "PensioenSysteem.Arbeidsverhouding", HandleEvent);
             _eventHandler.Start();
@@ -47,9 +51,7 @@ namespace PensioenSysteem.UI.ArbeidsverhoudingBeheer
             // refresh datagrid
             this.Invoke((MethodInvoker)delegate
             {
-                this.arbeidsverhoudingBindingSource.SuspendBinding();
-                this.arbeidsverhoudingTableAdapter.Fill(this.arbeidsverhoudingBeheerDataSet.Arbeidsverhouding);
-                this.arbeidsverhoudingBindingSource.ResumeBinding();
+                UpdateList();
             });
 
             return handled;
@@ -57,13 +59,12 @@ namespace PensioenSysteem.UI.ArbeidsverhoudingBeheer
 
         private bool HandleEvent(ArbeidsverhoudingGeregistreerd e)
         {
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ArbeidsverhoudingBeheer"].ConnectionString))
+            using (IDocumentSession session = _documentStore.OpenSession())
             {
-                string commandText = @"
-                    INSERT INTO [dbo].[Arbeidsverhouding] ([Nummer], [DeelnemerNummer], [WerkgeverNummer], [Ingangsdatum], [Einddatum], [Id], [Version])
-                    VALUES (@Nummer, @DeelnemerNummer, @WerkgeverNummer, @Ingangsdatum, @Einddatum, @Id, @Version)";
-                CommandDefinition cmd = new CommandDefinition(commandText, e);
-                connection.Execute(cmd);
+                Arbeidsverhouding arbeidsverhouding = 
+                    _arbeidsverhoudingGeregistreerdToArbeidsverhoudingMapper.Map<Arbeidsverhouding>(e);
+                session.Store(arbeidsverhouding);
+                session.SaveChanges();
             }
             return true;
         }
@@ -78,14 +79,48 @@ namespace PensioenSysteem.UI.ArbeidsverhoudingBeheer
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.arbeidsverhoudingBindingSource.SuspendBinding();
-            this.arbeidsverhoudingTableAdapter.Fill(this.arbeidsverhoudingBeheerDataSet.Arbeidsverhouding);
-            this.arbeidsverhoudingBindingSource.ResumeBinding();
+            UpdateList();
         }
 
         private void arbeidsverhoudingBindingSource_ListChanged(object sender, ListChangedEventArgs e)
         {
             recordCountStatusLabel.Text = "Aantal items : "  + this.arbeidsverhoudingBindingSource.List.Count;
+        }
+
+        private void UpdateList()
+        {
+            this.arbeidsverhoudingBindingSource.SuspendBinding();
+            this.arbeidsverhoudingBindingSource.List.Clear();
+
+            using (IDocumentSession session = _documentStore.OpenSession())
+            {
+                List<Arbeidsverhouding> arbeidsverhoudingen = session
+                    .Query<Arbeidsverhouding>()
+                    .Customize(x => x.WaitForNonStaleResultsAsOfNow()) // wait for any pending index udpates
+                    .ToList();
+                foreach (Arbeidsverhouding arbeidsverhouding in arbeidsverhoudingen)
+                {
+                    this.arbeidsverhoudingBindingSource.List.Add(arbeidsverhouding);
+                }
+            }
+
+            this.arbeidsverhoudingBindingSource.ResumeBinding();
+        }
+
+        private void InitializeDatastore()
+        {
+            _documentStore = new EmbeddableDocumentStore
+            {
+                DefaultDatabase = "ArbeidsverhoudingBeheer"
+            };
+            _documentStore.Initialize();
+        }
+
+        private void InitializeMappers()
+        {
+            var config = new MapperConfiguration(cfg =>
+                cfg.CreateMap<ArbeidsverhoudingGeregistreerd, Arbeidsverhouding>());
+            _arbeidsverhoudingGeregistreerdToArbeidsverhoudingMapper = config.CreateMapper();
         }
     }
 }

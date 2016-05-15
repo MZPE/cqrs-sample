@@ -1,43 +1,29 @@
 ﻿using Newtonsoft.Json;
 using PensioenSysteem.Application.ProcesManagers.Commands;
-using PensioenSysteem.Domain.Core;
-using PensioenSysteem.Domain.Arbeidsverhouding.Commands;
-using PensioenSysteem.Domain.Arbeidsverhouding.Events;
-using PensioenSysteem.Domain.Deelnemer.Commands;
-using PensioenSysteem.Domain.Deelnemer.Events;
-using PensioenSysteem.Domain.Werkgever.Commands;
-using PensioenSysteem.Domain.Werkgever.Events;
 using PensioenSysteem.Infrastructure;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.SqlClient;
-using Dapper;
-using System.Configuration;
+using PensioenSysteem.Domain.Messages.Deelnemer.Events;
+using PensioenSysteem.Domain.Messages.Werkgever.Events;
+using PensioenSysteem.Domain.Messages.Arbeidsverhouding.Events;
+using PensioenSysteem.Domain.Messages.Deelnemer.Commands;
+using PensioenSysteem.Domain.Messages.Werkgever.Commands;
+using PensioenSysteem.Domain.Messages.Arbeidsverhouding.Commands;
+using PensioenSysteem.Application.ProcesManagers.Model;
 
 namespace PensioenSysteem.Application.ProcesManagers
 {
     public class RegistrerenAanmelding
     {
-        private class ProcesState
-        {
-            public Guid CorrelationId { get; set; }
-            public RegistreerAanmeldingCommand InitierendCommand { get; set; }
-            public string Status { get; set; }
-            public string DeelnemerNummer { get; set; }
-            public string WerkgeverNummer { get; set; }
-            public DateTime StartTijdstip { get; set; }
-            public string Foutmelding { get; set; }
-        }
-
         private RabbitMQDomainEventHandler _eventHandler;
+        private ProcessStateRepository _repository;
 
         public void Start()
         {
+            // initialiseer de repo
+            _repository = new ProcessStateRepository();
+
             // start de eventhandler om de events die binnen dit proces een rol spelen op te vangen
             _eventHandler = new RabbitMQDomainEventHandler("127.0.0.1", "cqrs_user", "SeeQueErEs", "PensioenSysteem.RegistreerAanmelding", HandleEvent);
             _eventHandler.Start();
@@ -51,16 +37,16 @@ namespace PensioenSysteem.Application.ProcesManagers
         public void RegistreerAanmelding(RegistreerAanmeldingCommand command)
         {
             // registreer een nieuwe instantie van het RegistreerAanmelding proces 
-            ProcesState state = new ProcesState
+            ProcessState state = new ProcessState
             {
-                CorrelationId = command.CorrelationId,
+                Id = command.CorrelationId,
                 InitierendCommand = command,
                 DeelnemerNummer = null,
                 WerkgeverNummer = null,
                 StartTijdstip = DateTime.Now,
                 Status = "Actief"
             };
-            RegistreerProcesStart(state);
+            _repository.RegistreerProcessStart(state);
 
             // controleer aanwezigheid deelnemer
             // TODO
@@ -94,7 +80,7 @@ namespace PensioenSysteem.Application.ProcesManagers
             {
                 state.Status = "Fout";
                 state.Foutmelding = ex.ToString();
-                UpdateProcesState(state);
+                _repository.UpdateProcessState(state);
             }
         }
 
@@ -125,7 +111,7 @@ namespace PensioenSysteem.Application.ProcesManagers
         private bool Handle(DeelnemerGeregistreerd e)
         {
             // zoek de bijbehorende instantie van het RegistreerAanmelding proces 
-            ProcesState state = RaadpleegProcesState(e.CorrelationId);
+            ProcessState state = _repository.RaadpleegProcessState(e.CorrelationId);
             if (state == null)
             {
                 return false;
@@ -139,7 +125,7 @@ namespace PensioenSysteem.Application.ProcesManagers
 
             // werk het deelnemernummer bij
             state.DeelnemerNummer = e.Nummer;
-            UpdateProcesState(state);
+            _repository.UpdateProcessState(state);
 
             // controleer aanwezigheid werkgever
             // TODO
@@ -173,7 +159,7 @@ namespace PensioenSysteem.Application.ProcesManagers
             {
                 state.Status = "Fout";
                 state.Foutmelding = ex.ToString();
-                UpdateProcesState(state);
+                _repository.UpdateProcessState(state);
                 return false;
             }
 
@@ -183,7 +169,7 @@ namespace PensioenSysteem.Application.ProcesManagers
         private bool Handle(WerkgeverGeregistreerd e)
         {
             // zoek de bijbehorende instantie van het RegistreerAanmelding proces 
-            ProcesState state = RaadpleegProcesState(e.CorrelationId);
+            ProcessState state = _repository.RaadpleegProcessState(e.CorrelationId);
             if (state == null)
             {
                 return false;
@@ -197,7 +183,7 @@ namespace PensioenSysteem.Application.ProcesManagers
 
             // werk het werkgevernummer bij
             state.WerkgeverNummer = e.Nummer;
-            UpdateProcesState(state);
+            _repository.UpdateProcessState(state);
 
             try
             {
@@ -224,7 +210,7 @@ namespace PensioenSysteem.Application.ProcesManagers
             {
                 state.Status = "Fout";
                 state.Foutmelding = ex.ToString();
-                UpdateProcesState(state);
+                _repository.UpdateProcessState(state);
                 return false;
             }
 
@@ -234,7 +220,7 @@ namespace PensioenSysteem.Application.ProcesManagers
         private bool Handle(ArbeidsverhoudingGeregistreerd e)
         {
             // zoek de bijbehorende instantie van het RegistreerAanmelding proces 
-            ProcesState state = RaadpleegProcesState(e.CorrelationId);
+            ProcessState state = _repository.RaadpleegProcessState(e.CorrelationId);
             if (state == null)
             {
                 return false;
@@ -244,86 +230,9 @@ namespace PensioenSysteem.Application.ProcesManagers
 
             // proces administratie bijwerken
             state.Status = "Afgerond";
-            UpdateProcesState(state);
+            _repository.UpdateProcessState(state);
 
             return true;
-        }
-
-        private void RegistreerProcesStart(ProcesState state)
-        {
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ProcesManagement"].ConnectionString))
-            {
-                string commandText = @"
-                    INSERT INTO [dbo].[RegistrerenAanmelding]
-                               ([CorrelationId]
-                               ,[InitierendCommand]
-                               ,[DeelnemerNummer]
-                               ,[WerkgeverNummer]
-                               ,[StartTijdstip]
-                               ,[Status])
-                         VALUES
-                               (@CorrelationId
-                               ,@InitierendCommand
-                               ,@DeelnemerNummer
-                               ,@WerkgeverNummer
-                               ,@StartTijdstip
-                               ,@Status)";
-
-                dynamic parameters = new 
-                {
-                    CorrelationId = state.CorrelationId,
-                    InitierendCommand = JsonConvert.SerializeObject(state.InitierendCommand),
-                    DeelnemerNummer = state.DeelnemerNummer,
-                    WerkgeverNummer = state.WerkgeverNummer,
-                    Status = state.Status,
-                    StartTijdstip = state.StartTijdstip
-                };
-                CommandDefinition cmd = new CommandDefinition(commandText, parameters);
-                connection.Execute(cmd);
-            }
-        }
-
-        private ProcesState RaadpleegProcesState(Guid correlationId)
-        {
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ProcesManagement"].ConnectionString))
-            {
-                string commandText = @"
-                    SELECT *
-                    FROM   [RegistrerenAanmelding]
-                    WHERE  [CorrelationId] = @CorrelationId";
-                dynamic state = connection.Query(commandText, new { CorrelationId = correlationId }).FirstOrDefault();
-                if (state != null)
-                {
-                    return new ProcesState
-                    {
-                        CorrelationId = state.CorrelationId,
-                        InitierendCommand = JsonConvert.DeserializeObject<RegistreerAanmeldingCommand>(state.InitierendCommand),
-                        Status = state.Status,
-                        DeelnemerNummer = state.DeelnemerNummer,
-                        WerkgeverNummer = state.WerkgeverNummer,
-                        StartTijdstip = state.StartTijdstip,
-                        Foutmelding = state.Foutmelding
-                    };
-                }
-            }
-
-            return null;
-        }
-
-        private void UpdateProcesState(ProcesState state)
-        {
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ProcesManagement"].ConnectionString))
-            {
-                string commandText = @"
-                    UPDATE [dbo].[RegistrerenAanmelding]
-                       SET [DeelnemerNummer] = @DeelnemerNummer
-                          ,[WerkgeverNummer] = @WerkgeverNummer
-                          ,[Status] = @Status
-                          ,[Foutmelding] = @Foutmelding
-                     WHERE [CorrelationId] = @CorrelationId";
-                CommandDefinition cmd = new CommandDefinition(commandText, state);
-                connection.Execute(cmd);
-            }
         }
     }
 }

@@ -41,17 +41,14 @@
             this.woonAdresPlaatsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.deelnemerBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.deelnemerBeheerDataSet = new PensioenSysteem.UI.DeelnemerBeheer.DeelnemerBeheerDataSet();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.deelnemerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.verhuisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deelnemerTableAdapter = new PensioenSysteem.UI.DeelnemerBeheer.DeelnemerBeheerDataSetTableAdapters.DeelnemerTableAdapter();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.recordCountStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.deelnemerBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.deelnemerBeheerDataSet)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -164,14 +161,8 @@
             // 
             // deelnemerBindingSource
             // 
-            this.deelnemerBindingSource.DataMember = "Deelnemer";
-            this.deelnemerBindingSource.DataSource = this.deelnemerBeheerDataSet;
+            this.deelnemerBindingSource.DataSource = typeof(PensioenSysteem.UI.DeelnemerBeheer.Model.Deelnemer);
             this.deelnemerBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.deelnemerBindingSource_ListChanged);
-            // 
-            // deelnemerBeheerDataSet
-            // 
-            this.deelnemerBeheerDataSet.DataSetName = "DeelnemerBeheerDataSet";
-            this.deelnemerBeheerDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // menuStrip1
             // 
@@ -206,10 +197,6 @@
             this.verhuisToolStripMenuItem.Text = "&Verhuis";
             this.verhuisToolStripMenuItem.Click += new System.EventHandler(this.verhuisToolStripMenuItem_Click);
             // 
-            // deelnemerTableAdapter
-            // 
-            this.deelnemerTableAdapter.ClearBeforeFill = true;
-            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -241,7 +228,6 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.deelnemerBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.deelnemerBeheerDataSet)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -254,9 +240,7 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridView1;
-        private DeelnemerBeheerDataSet deelnemerBeheerDataSet;
         private System.Windows.Forms.BindingSource deelnemerBindingSource;
-        private DeelnemerBeheerDataSetTableAdapters.DeelnemerTableAdapter deelnemerTableAdapter;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem deelnemerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem verhuisToolStripMenuItem;

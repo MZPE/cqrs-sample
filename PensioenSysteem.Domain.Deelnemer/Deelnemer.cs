@@ -1,11 +1,7 @@
 ﻿using PensioenSysteem.Domain.Core;
-using PensioenSysteem.Domain.Deelnemer.Commands;
-using PensioenSysteem.Domain.Deelnemer.Events;
+using PensioenSysteem.Domain.Messages.Deelnemer.Commands;
+using PensioenSysteem.Domain.Messages.Deelnemer.Events;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PensioenSysteem.Domain.Deelnemer
 {

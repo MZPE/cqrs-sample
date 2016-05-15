@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PensioenSysteem.Domain.Core", "PensioenSysteem.Domain.Core\PensioenSysteem.Domain.Core.csproj", "{127EE6AC-C0C3-4219-A6C6-A9B4D98B84B1}"
 EndProject
@@ -31,7 +31,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PensioenSysteem.UI.Arbeidsv
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1D1516CD-5562-4307-9484-09F9AD641723}"
 	ProjectSection(SolutionItems) = preProject
-		CleanUpDatabases.sql = CleanUpDatabases.sql
 		Layers.png = Layers.png
 		LICENSE.txt = LICENSE.txt
 		LSA.png = LSA.png
@@ -40,6 +39,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PensioenSysteem.Application.Correspondentie", "PensioenSysteem.Application.Correspondentie\PensioenSysteem.Application.Correspondentie.csproj", "{D9E0573F-2C84-4F09-8CB2-AA63D55FA924}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PensioenSysteem.Domain.Messages", "PensioenSysteem.Domain.Messages\PensioenSysteem.Domain.Messages.csproj", "{AF7601BD-8216-4C23-982E-ED27B59B026C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -193,6 +194,18 @@ Global
 		{D9E0573F-2C84-4F09-8CB2-AA63D55FA924}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D9E0573F-2C84-4F09-8CB2-AA63D55FA924}.Release|x86.ActiveCfg = Release|Any CPU
 		{D9E0573F-2C84-4F09-8CB2-AA63D55FA924}.Release|x86.Build.0 = Release|Any CPU
+		{AF7601BD-8216-4C23-982E-ED27B59B026C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF7601BD-8216-4C23-982E-ED27B59B026C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF7601BD-8216-4C23-982E-ED27B59B026C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AF7601BD-8216-4C23-982E-ED27B59B026C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AF7601BD-8216-4C23-982E-ED27B59B026C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AF7601BD-8216-4C23-982E-ED27B59B026C}.Debug|x86.Build.0 = Debug|Any CPU
+		{AF7601BD-8216-4C23-982E-ED27B59B026C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF7601BD-8216-4C23-982E-ED27B59B026C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF7601BD-8216-4C23-982E-ED27B59B026C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AF7601BD-8216-4C23-982E-ED27B59B026C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AF7601BD-8216-4C23-982E-ED27B59B026C}.Release|x86.ActiveCfg = Release|Any CPU
+		{AF7601BD-8216-4C23-982E-ED27B59B026C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

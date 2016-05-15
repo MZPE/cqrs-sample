@@ -30,24 +30,21 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.nummerDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.deelnemerNummerDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.werkgeverNummerDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ingangsdatumDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.einddatumDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.versionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.arbeidsverhoudingBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.arbeidsverhoudingBeheerDataSet = new PensioenSysteem.UI.ArbeidsverhoudingBeheer.ArbeidsverhoudingBeheerDataSet();
-            this.arbeidsverhoudingTableAdapter = new PensioenSysteem.UI.ArbeidsverhoudingBeheer.ArbeidsverhoudingBeheerDataSetTableAdapters.ArbeidsverhoudingTableAdapter();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.arbeidsverhoudingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.recordCountStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.versionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nummerDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.deelnemerNummerDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.werkgeverNummerDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ingangsDatumDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.eindDatumDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.arbeidsverhoudingBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.arbeidsverhoudingBeheerDataSet)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -60,13 +57,13 @@
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.idDataGridViewTextBoxColumn,
+            this.versionDataGridViewTextBoxColumn,
             this.nummerDataGridViewTextBoxColumn,
             this.deelnemerNummerDataGridViewTextBoxColumn,
             this.werkgeverNummerDataGridViewTextBoxColumn,
-            this.ingangsdatumDataGridViewTextBoxColumn,
-            this.einddatumDataGridViewTextBoxColumn,
-            this.idDataGridViewTextBoxColumn,
-            this.versionDataGridViewTextBoxColumn});
+            this.ingangsDatumDataGridViewTextBoxColumn,
+            this.eindDatumDataGridViewTextBoxColumn});
             this.dataGridView1.DataSource = this.arbeidsverhoudingBindingSource;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 24);
@@ -75,76 +72,10 @@
             this.dataGridView1.Size = new System.Drawing.Size(866, 320);
             this.dataGridView1.TabIndex = 0;
             // 
-            // nummerDataGridViewTextBoxColumn
-            // 
-            this.nummerDataGridViewTextBoxColumn.DataPropertyName = "Nummer";
-            this.nummerDataGridViewTextBoxColumn.HeaderText = "Nummer";
-            this.nummerDataGridViewTextBoxColumn.Name = "nummerDataGridViewTextBoxColumn";
-            this.nummerDataGridViewTextBoxColumn.ReadOnly = true;
-            this.nummerDataGridViewTextBoxColumn.Width = 71;
-            // 
-            // deelnemerNummerDataGridViewTextBoxColumn
-            // 
-            this.deelnemerNummerDataGridViewTextBoxColumn.DataPropertyName = "DeelnemerNummer";
-            this.deelnemerNummerDataGridViewTextBoxColumn.HeaderText = "DeelnemerNummer";
-            this.deelnemerNummerDataGridViewTextBoxColumn.Name = "deelnemerNummerDataGridViewTextBoxColumn";
-            this.deelnemerNummerDataGridViewTextBoxColumn.ReadOnly = true;
-            this.deelnemerNummerDataGridViewTextBoxColumn.Width = 122;
-            // 
-            // werkgeverNummerDataGridViewTextBoxColumn
-            // 
-            this.werkgeverNummerDataGridViewTextBoxColumn.DataPropertyName = "WerkgeverNummer";
-            this.werkgeverNummerDataGridViewTextBoxColumn.HeaderText = "WerkgeverNummer";
-            this.werkgeverNummerDataGridViewTextBoxColumn.Name = "werkgeverNummerDataGridViewTextBoxColumn";
-            this.werkgeverNummerDataGridViewTextBoxColumn.ReadOnly = true;
-            this.werkgeverNummerDataGridViewTextBoxColumn.Width = 124;
-            // 
-            // ingangsdatumDataGridViewTextBoxColumn
-            // 
-            this.ingangsdatumDataGridViewTextBoxColumn.DataPropertyName = "Ingangsdatum";
-            this.ingangsdatumDataGridViewTextBoxColumn.HeaderText = "Ingangsdatum";
-            this.ingangsdatumDataGridViewTextBoxColumn.Name = "ingangsdatumDataGridViewTextBoxColumn";
-            this.ingangsdatumDataGridViewTextBoxColumn.ReadOnly = true;
-            this.ingangsdatumDataGridViewTextBoxColumn.Width = 99;
-            // 
-            // einddatumDataGridViewTextBoxColumn
-            // 
-            this.einddatumDataGridViewTextBoxColumn.DataPropertyName = "Einddatum";
-            this.einddatumDataGridViewTextBoxColumn.HeaderText = "Einddatum";
-            this.einddatumDataGridViewTextBoxColumn.Name = "einddatumDataGridViewTextBoxColumn";
-            this.einddatumDataGridViewTextBoxColumn.ReadOnly = true;
-            this.einddatumDataGridViewTextBoxColumn.Width = 82;
-            // 
-            // idDataGridViewTextBoxColumn
-            // 
-            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
-            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            this.idDataGridViewTextBoxColumn.ReadOnly = true;
-            this.idDataGridViewTextBoxColumn.Width = 41;
-            // 
-            // versionDataGridViewTextBoxColumn
-            // 
-            this.versionDataGridViewTextBoxColumn.DataPropertyName = "Version";
-            this.versionDataGridViewTextBoxColumn.HeaderText = "Version";
-            this.versionDataGridViewTextBoxColumn.Name = "versionDataGridViewTextBoxColumn";
-            this.versionDataGridViewTextBoxColumn.ReadOnly = true;
-            this.versionDataGridViewTextBoxColumn.Width = 67;
-            // 
             // arbeidsverhoudingBindingSource
             // 
-            this.arbeidsverhoudingBindingSource.DataMember = "Arbeidsverhouding";
-            this.arbeidsverhoudingBindingSource.DataSource = this.arbeidsverhoudingBeheerDataSet;
+            this.arbeidsverhoudingBindingSource.DataSource = typeof(PensioenSysteem.UI.ArbeidsverhoudingBeheer.Model.Arbeidsverhouding);
             this.arbeidsverhoudingBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.arbeidsverhoudingBindingSource_ListChanged);
-            // 
-            // arbeidsverhoudingBeheerDataSet
-            // 
-            this.arbeidsverhoudingBeheerDataSet.DataSetName = "ArbeidsverhoudingBeheerDataSet";
-            this.arbeidsverhoudingBeheerDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // arbeidsverhoudingTableAdapter
-            // 
-            this.arbeidsverhoudingTableAdapter.ClearBeforeFill = true;
             // 
             // menuStrip1
             // 
@@ -187,6 +118,62 @@
             this.recordCountStatusLabel.Size = new System.Drawing.Size(82, 17);
             this.recordCountStatusLabel.Text = "Aantal items : ";
             // 
+            // idDataGridViewTextBoxColumn
+            // 
+            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
+            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            this.idDataGridViewTextBoxColumn.ReadOnly = true;
+            this.idDataGridViewTextBoxColumn.Width = 41;
+            // 
+            // versionDataGridViewTextBoxColumn
+            // 
+            this.versionDataGridViewTextBoxColumn.DataPropertyName = "Version";
+            this.versionDataGridViewTextBoxColumn.HeaderText = "Version";
+            this.versionDataGridViewTextBoxColumn.Name = "versionDataGridViewTextBoxColumn";
+            this.versionDataGridViewTextBoxColumn.ReadOnly = true;
+            this.versionDataGridViewTextBoxColumn.Width = 67;
+            // 
+            // nummerDataGridViewTextBoxColumn
+            // 
+            this.nummerDataGridViewTextBoxColumn.DataPropertyName = "Nummer";
+            this.nummerDataGridViewTextBoxColumn.HeaderText = "Nummer";
+            this.nummerDataGridViewTextBoxColumn.Name = "nummerDataGridViewTextBoxColumn";
+            this.nummerDataGridViewTextBoxColumn.ReadOnly = true;
+            this.nummerDataGridViewTextBoxColumn.Width = 71;
+            // 
+            // deelnemerNummerDataGridViewTextBoxColumn
+            // 
+            this.deelnemerNummerDataGridViewTextBoxColumn.DataPropertyName = "DeelnemerNummer";
+            this.deelnemerNummerDataGridViewTextBoxColumn.HeaderText = "DeelnemerNummer";
+            this.deelnemerNummerDataGridViewTextBoxColumn.Name = "deelnemerNummerDataGridViewTextBoxColumn";
+            this.deelnemerNummerDataGridViewTextBoxColumn.ReadOnly = true;
+            this.deelnemerNummerDataGridViewTextBoxColumn.Width = 122;
+            // 
+            // werkgeverNummerDataGridViewTextBoxColumn
+            // 
+            this.werkgeverNummerDataGridViewTextBoxColumn.DataPropertyName = "WerkgeverNummer";
+            this.werkgeverNummerDataGridViewTextBoxColumn.HeaderText = "WerkgeverNummer";
+            this.werkgeverNummerDataGridViewTextBoxColumn.Name = "werkgeverNummerDataGridViewTextBoxColumn";
+            this.werkgeverNummerDataGridViewTextBoxColumn.ReadOnly = true;
+            this.werkgeverNummerDataGridViewTextBoxColumn.Width = 124;
+            // 
+            // ingangsDatumDataGridViewTextBoxColumn
+            // 
+            this.ingangsDatumDataGridViewTextBoxColumn.DataPropertyName = "IngangsDatum";
+            this.ingangsDatumDataGridViewTextBoxColumn.HeaderText = "IngangsDatum";
+            this.ingangsDatumDataGridViewTextBoxColumn.Name = "ingangsDatumDataGridViewTextBoxColumn";
+            this.ingangsDatumDataGridViewTextBoxColumn.ReadOnly = true;
+            this.ingangsDatumDataGridViewTextBoxColumn.Width = 101;
+            // 
+            // eindDatumDataGridViewTextBoxColumn
+            // 
+            this.eindDatumDataGridViewTextBoxColumn.DataPropertyName = "EindDatum";
+            this.eindDatumDataGridViewTextBoxColumn.HeaderText = "EindDatum";
+            this.eindDatumDataGridViewTextBoxColumn.Name = "eindDatumDataGridViewTextBoxColumn";
+            this.eindDatumDataGridViewTextBoxColumn.ReadOnly = true;
+            this.eindDatumDataGridViewTextBoxColumn.Width = 84;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -202,7 +189,6 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.arbeidsverhoudingBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.arbeidsverhoudingBeheerDataSet)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -215,21 +201,19 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridView1;
-        private ArbeidsverhoudingBeheerDataSet arbeidsverhoudingBeheerDataSet;
         private System.Windows.Forms.BindingSource arbeidsverhoudingBindingSource;
-        private ArbeidsverhoudingBeheerDataSetTableAdapters.ArbeidsverhoudingTableAdapter arbeidsverhoudingTableAdapter;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nummerDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn deelnemerNummerDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn werkgeverNummerDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ingangsdatumDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn einddatumDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn versionDataGridViewTextBoxColumn;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem arbeidsverhoudingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel recordCountStatusLabel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn versionDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nummerDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn deelnemerNummerDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn werkgeverNummerDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ingangsDatumDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn eindDatumDataGridViewTextBoxColumn;
     }
 }
 

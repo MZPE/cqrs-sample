@@ -138,7 +138,7 @@ De applicatie bestaat uit de volgende componenten:
 **Presentation laag**
 
 * PensioenSysteem.UI.DeelnemerBeheer - Bevat een UI voor het inzien en beheren 
-  van deelnemer gegevens. De gegevens worden gelezen uit een SQL Server 
+  van deelnemer gegevens. De gegevens worden gelezen uit een RavenDB 
   database. Deze database wordt gevuld door events die te maken hebben met 
   deelnemers te ontvangen en op basis daarvan de database bij te werken. Deze 
   eventsubscriber leeft in de UI applicatie (hiervoor wordt de 
@@ -198,8 +198,8 @@ implementatie bestaat uit het simpelweg serialiseren van de event-data en deze
 **Proces managers**  
 In de demo applicatie bevindt zich slechts 1 procesmanager: 
 Application.ProcesManagers.RegistrerenAanmelding. Dit is een demo implementatie 
-van een procesmanager. Persistence is geïmplementeerd middels een tabel in SQL 
-Server. Dus als het proces crasht, blijft de administratie rondom de lopende 
+van een procesmanager. Persistence is geïmplementeerd middels een tabel in RavenDB. 
+Dus als het proces crasht, blijft de administratie rondom de lopende 
 processen aanwezig en zullen events die nog in de queue staan voor nog lopende 
 worden afgehandeld zodra de procesmanager weer wordt gestart.
 
@@ -235,8 +235,8 @@ De volgende producten en frameworks zijn ingezet binnen de applicatie:
 * Newtonsoft JSon.NET - voor de serializatie van gegevens naar JSON.
 * Dapper - voor data-access.
 * RabbitMQ - voor het publiceren van events.
-* SQL Server - voor het opslaan van gegevens voor de readmodels van de 
-  verschillende UI componenten.
+* RavenDB - embedded Document Database voor het opslaan van gegevens voor de 
+  readmodels van de verschillende onderdelen.
 * PDFSharp - voor het genereren van brieven.
 
 Installatie en configuratie
@@ -282,29 +282,6 @@ solution.
     aan de PSX met routing key 'Deelnemer.#'.
 14. Definieer een durable queue 'PensioenSysteem.AuditLog' en bind deze aan de 
     PSX met routing key '#'.
-
-**SQL Server**  
-Er moet een SQL Server beschikbaar zijn (SQL Express is voldoende). De standaard 
-servernaam die wordt gebruikt in connectionstrings is '.\sqlexpress'. Als een 
-andere database server wordt gebruikt, dan moet in de App.config van de 
-Pensioenbeheer.UI.* projecten 2 connectionstrings aangepast worden zodat de 
-juiste SQL Server naam wordt gebruikt.
-
-De volgende 4 databases moeten aanwezig zijn: ArbeidsverhoudingBeheer, 
-DeelnemerBeheer, WerkgeverBeheer, Creespondentie en ProcesManagement. Voer de 
-volgende SQL scripts uit voor het aanmaken van deze databases en de bijbehorende 
-logins en users:
-
-* PensioenSysteem.UI.ArbeidsverhoudingBeheer\sql\ArbeidsverhoudingBeheer.sql
-* PensioenSysteem.UI.DeelnemerBeheer\sql\DeelnemerBeheer.sql
-* PensioenSysteem.UI.WerkgeverBeheer\sql\WerkgeverBeheer.sql
-* PensioenSysteem.Application.Correspondentie\sql\Correspondentie.sql
-* PensioenSysteem.Application.ProcesManagers\sql\ProcesManagement.sql
-
-Na het aanmaken van de databases moet het password van de aangemaakt logins 
-(ArbeidsverhoudingBeheerUser, DeelnemerBeheerUser, WerkgeverBeheerUser, 
-Correspondentieuser en ProcesManagementUser gereset worden naar 
-'S3cretP@$$w0rd').
 
 **Filesystem**  
 Binnen de applicatie wordt gebruikgemaakt van 3 folders:
