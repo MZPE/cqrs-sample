@@ -1,24 +1,21 @@
-﻿using Dapper;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using PensioenSysteem.Application.Correspondentie.Model;
-using PensioenSysteem.Domain.Deelnemer.Events;
+using PensioenSysteem.Domain.Messages.Deelnemer.Events;
 using PensioenSysteem.Infrastructure;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PensioenSysteem.Application.Correspondentie
 {
     class Program
     {
+        private static DeelnemerRepository _repo;
+
         static void Main(string[] args)
         {
+            _repo = new DeelnemerRepository();
+
             var eventHandler = new RabbitMQDomainEventHandler("127.0.0.1", "cqrs_user", "SeeQueErEs", "PensioenSysteem.Correspondentie", HandleEvent);
             eventHandler.Start();
 
@@ -48,7 +45,7 @@ namespace PensioenSysteem.Application.Correspondentie
 
         private static bool Handle(DeelnemerGeregistreerd deelnemerGeregistreerd)
         {
-            DeelnemerRepository.RegistreerDeelnemer(deelnemerGeregistreerd);
+            _repo.RegistreerDeelnemer(deelnemerGeregistreerd);
 
             Console.WriteLine("Deelnemer {0} geregistreerd", deelnemerGeregistreerd.Naam);
 
@@ -78,7 +75,7 @@ namespace PensioenSysteem.Application.Correspondentie
             Deelnemer deelnemer;
 
             // kijk eest in de local cache
-            deelnemer = DeelnemerRepository.RaadpleegDeelnemer(id);
+            deelnemer = _repo.RaadpleegDeelnemer(id);
 
             // als niet gevonden in local cache: 
             // roep Deelnemer API aan om de deelnemer op te halen 
@@ -88,7 +85,7 @@ namespace PensioenSysteem.Application.Correspondentie
                 if (deelnemer != null)
                 {
                     // sla op in de local cache
-                    DeelnemerRepository.RegistreerDeelnemer(deelnemer);
+                    _repo.RegistreerDeelnemer(deelnemer);
                 }
             }
 

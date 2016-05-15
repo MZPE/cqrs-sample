@@ -1,5 +1,5 @@
 ﻿using PensioenSysteem.Domain.Core;
-using PensioenSysteem.Domain.Deelnemer.Commands;
+using PensioenSysteem.Domain.Messages.Deelnemer.Commands;
 using PensioenSysteem.Infrastructure;
 using System;
 using System.Net;

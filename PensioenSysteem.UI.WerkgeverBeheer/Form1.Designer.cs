@@ -28,9 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Nummer = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.werkgeverBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.werkgeverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.recordCountStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.versionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nummerDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bedrijfsNaamDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.naamContactpersoonDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.emailAdresDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -39,18 +47,8 @@
             this.vestigingsAdresHuisnummerToevoegingDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vestigingsAdresPostcodeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vestigingsAdresPlaatsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.werkgeverBindingSource = new System.Windows.Forms.BindingSource();
-            this.werkgeverBeheerDataSet = new PensioenSysteem.UI.WerkgeverBeheer.WerkgeverBeheerDataSet();
-            this.werkgeverTableAdapter = new PensioenSysteem.UI.WerkgeverBeheer.WerkgeverBeheerDataSetTableAdapters.WerkgeverTableAdapter();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.werkgeverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.recordCountStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.werkgeverBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.werkgeverBeheerDataSet)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -63,8 +61,9 @@
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Nummer,
+            this.idDataGridViewTextBoxColumn,
             this.versionDataGridViewTextBoxColumn,
+            this.nummerDataGridViewTextBoxColumn,
             this.bedrijfsNaamDataGridViewTextBoxColumn,
             this.naamContactpersoonDataGridViewTextBoxColumn,
             this.emailAdresDataGridViewTextBoxColumn,
@@ -72,8 +71,7 @@
             this.vestigingsAdresHuisnummerDataGridViewTextBoxColumn,
             this.vestigingsAdresHuisnummerToevoegingDataGridViewTextBoxColumn,
             this.vestigingsAdresPostcodeDataGridViewTextBoxColumn,
-            this.vestigingsAdresPlaatsDataGridViewTextBoxColumn,
-            this.Id});
+            this.vestigingsAdresPlaatsDataGridViewTextBoxColumn});
             this.dataGridView1.DataSource = this.werkgeverBindingSource;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 24);
@@ -82,13 +80,59 @@
             this.dataGridView1.Size = new System.Drawing.Size(853, 371);
             this.dataGridView1.TabIndex = 0;
             // 
-            // Nummer
+            // werkgeverBindingSource
             // 
-            this.Nummer.DataPropertyName = "Nummer";
-            this.Nummer.HeaderText = "Nummer";
-            this.Nummer.Name = "Nummer";
-            this.Nummer.ReadOnly = true;
-            this.Nummer.Width = 71;
+            this.werkgeverBindingSource.DataSource = typeof(PensioenSysteem.UI.WerkgeverBeheer.Model.Werkgever);
+            this.werkgeverBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.werkgeverBindingSource_ListChanged);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.werkgeverToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(853, 24);
+            this.menuStrip1.TabIndex = 1;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // werkgeverToolStripMenuItem
+            // 
+            this.werkgeverToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.refreshToolStripMenuItem});
+            this.werkgeverToolStripMenuItem.Name = "werkgeverToolStripMenuItem";
+            this.werkgeverToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
+            this.werkgeverToolStripMenuItem.Text = "&Werkgever";
+            // 
+            // refreshToolStripMenuItem
+            // 
+            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.refreshToolStripMenuItem.Text = "&Refresh";
+            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.recordCountStatusLabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 395);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(853, 22);
+            this.statusStrip1.TabIndex = 2;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // recordCountStatusLabel
+            // 
+            this.recordCountStatusLabel.Name = "recordCountStatusLabel";
+            this.recordCountStatusLabel.Size = new System.Drawing.Size(82, 17);
+            this.recordCountStatusLabel.Text = "Aantal items : ";
+            // 
+            // idDataGridViewTextBoxColumn
+            // 
+            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
+            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            this.idDataGridViewTextBoxColumn.ReadOnly = true;
+            this.idDataGridViewTextBoxColumn.Width = 41;
             // 
             // versionDataGridViewTextBoxColumn
             // 
@@ -97,6 +141,14 @@
             this.versionDataGridViewTextBoxColumn.Name = "versionDataGridViewTextBoxColumn";
             this.versionDataGridViewTextBoxColumn.ReadOnly = true;
             this.versionDataGridViewTextBoxColumn.Width = 67;
+            // 
+            // nummerDataGridViewTextBoxColumn
+            // 
+            this.nummerDataGridViewTextBoxColumn.DataPropertyName = "Nummer";
+            this.nummerDataGridViewTextBoxColumn.HeaderText = "Nummer";
+            this.nummerDataGridViewTextBoxColumn.Name = "nummerDataGridViewTextBoxColumn";
+            this.nummerDataGridViewTextBoxColumn.ReadOnly = true;
+            this.nummerDataGridViewTextBoxColumn.Width = 71;
             // 
             // bedrijfsNaamDataGridViewTextBoxColumn
             // 
@@ -162,70 +214,6 @@
             this.vestigingsAdresPlaatsDataGridViewTextBoxColumn.ReadOnly = true;
             this.vestigingsAdresPlaatsDataGridViewTextBoxColumn.Width = 136;
             // 
-            // Id
-            // 
-            this.Id.DataPropertyName = "Id";
-            this.Id.HeaderText = "Id";
-            this.Id.Name = "Id";
-            this.Id.ReadOnly = true;
-            this.Id.Width = 41;
-            // 
-            // werkgeverBindingSource
-            // 
-            this.werkgeverBindingSource.DataMember = "Werkgever";
-            this.werkgeverBindingSource.DataSource = this.werkgeverBeheerDataSet;
-            this.werkgeverBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.werkgeverBindingSource_ListChanged);
-            // 
-            // werkgeverBeheerDataSet
-            // 
-            this.werkgeverBeheerDataSet.DataSetName = "WerkgeverBeheerDataSet";
-            this.werkgeverBeheerDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // werkgeverTableAdapter
-            // 
-            this.werkgeverTableAdapter.ClearBeforeFill = true;
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.werkgeverToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(853, 24);
-            this.menuStrip1.TabIndex = 1;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // werkgeverToolStripMenuItem
-            // 
-            this.werkgeverToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.refreshToolStripMenuItem});
-            this.werkgeverToolStripMenuItem.Name = "werkgeverToolStripMenuItem";
-            this.werkgeverToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
-            this.werkgeverToolStripMenuItem.Text = "&Werkgever";
-            // 
-            // refreshToolStripMenuItem
-            // 
-            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
-            this.refreshToolStripMenuItem.Text = "&Refresh";
-            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.recordCountStatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 395);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(853, 22);
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // recordCountStatusLabel
-            // 
-            this.recordCountStatusLabel.Name = "recordCountStatusLabel";
-            this.recordCountStatusLabel.Size = new System.Drawing.Size(82, 17);
-            this.recordCountStatusLabel.Text = "Aantal items : ";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -241,7 +229,6 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.werkgeverBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.werkgeverBeheerDataSet)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -254,11 +241,15 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridView1;
-        private WerkgeverBeheerDataSet werkgeverBeheerDataSet;
         private System.Windows.Forms.BindingSource werkgeverBindingSource;
-        private WerkgeverBeheerDataSetTableAdapters.WerkgeverTableAdapter werkgeverTableAdapter;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Nummer;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem werkgeverToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel recordCountStatusLabel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn versionDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nummerDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn bedrijfsNaamDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn naamContactpersoonDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn emailAdresDataGridViewTextBoxColumn;
@@ -267,12 +258,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn vestigingsAdresHuisnummerToevoegingDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn vestigingsAdresPostcodeDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn vestigingsAdresPlaatsDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Id;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem werkgeverToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel recordCountStatusLabel;
     }
 }
 

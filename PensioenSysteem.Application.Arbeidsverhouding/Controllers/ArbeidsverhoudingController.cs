@@ -1,9 +1,6 @@
-﻿using PensioenSysteem.Domain.Arbeidsverhouding.Commands;
-using PensioenSysteem.Domain.Core;
-using PensioenSysteem.Infrastructure;
+﻿using PensioenSysteem.Domain.Core;
+using PensioenSysteem.Domain.Messages.Arbeidsverhouding.Commands;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;

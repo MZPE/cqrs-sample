@@ -1,18 +1,12 @@
-﻿using Dapper;
-using Newtonsoft.Json;
-using PdfSharp.Drawing;
+﻿using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
 using PdfSharp.Pdf;
 using PensioenSysteem.Application.Correspondentie.Model;
 using PensioenSysteem.Application.Correspondentie.Properties;
-using PensioenSysteem.Domain.Deelnemer.Events;
 using System;
-using System.Linq;
 using System.Configuration;
-using System.Data.SqlClient;
 using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using PensioenSysteem.Domain.Messages.Deelnemer.Events;
 
 namespace PensioenSysteem.Application.Correspondentie
 {

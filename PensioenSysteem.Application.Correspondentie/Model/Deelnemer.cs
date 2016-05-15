@@ -1,11 +1,4 @@
-﻿using PensioenSysteem.Domain.Core;
-using PensioenSysteem.Domain.Deelnemer.Commands;
-using PensioenSysteem.Domain.Deelnemer.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace PensioenSysteem.Application.Correspondentie.Model
 {
