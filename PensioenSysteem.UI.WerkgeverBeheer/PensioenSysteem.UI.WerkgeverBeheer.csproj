@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WerkgeverRepository.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,6 +100,9 @@
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\PensioenSysteem.UI.WerkgeverBeheer.Model.Werkgever.datasource" />
+    <None Include="Raven.Studio.Html5.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

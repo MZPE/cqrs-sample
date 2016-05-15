@@ -84,6 +84,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Raven.Studio.Html5.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PensioenSysteem.Domain.Core\PensioenSysteem.Domain.Core.csproj">

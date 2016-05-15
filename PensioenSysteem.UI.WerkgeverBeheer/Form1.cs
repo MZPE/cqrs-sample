@@ -16,35 +16,14 @@ namespace PensioenSysteem.UI.WerkgeverBeheer
     public partial class Form1 : Form
     {
         private RabbitMQDomainEventHandler _eventHandler;
-        private EmbeddableDocumentStore _documentStore;
+        private WerkgeverRepository _repo;
         private IMapper _werkgeverGeregistreerdToWerkgeverMapper;
 
         public Form1()
         {
             InitializeComponent();
-            InitializeDatastore();
+            _repo = new WerkgeverRepository();
             InitializeMappers();
-        }
-
-        private void InitializeMappers()
-        {
-            var config = new MapperConfiguration(cfg =>
-                cfg.CreateMap<WerkgeverGeregistreerd, Werkgever>()
-                    .ForMember(dest => dest.VestigingsAdresStraat, opt => opt.MapFrom(src => src.Straat))
-                    .ForMember(dest => dest.VestigingsAdresHuisnummer, opt => opt.MapFrom(src => src.Huisnummer))
-                    .ForMember(dest => dest.VestigingsAdresHuisnummerToevoeging, opt => opt.MapFrom(src => src.HuisnummerToevoeging))
-                    .ForMember(dest => dest.VestigingsAdresPostcode, opt => opt.MapFrom(src => src.Postcode))
-                    .ForMember(dest => dest.VestigingsAdresPlaats, opt => opt.MapFrom(src => src.Plaats)));
-            _werkgeverGeregistreerdToWerkgeverMapper = config.CreateMapper();
-        }
-
-        private void InitializeDatastore()
-        {
-            _documentStore = new EmbeddableDocumentStore
-            {
-                DefaultDatabase = "WerkgeverBeheer"
-            };
-            _documentStore.Initialize();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -77,12 +56,8 @@ namespace PensioenSysteem.UI.WerkgeverBeheer
 
         private bool HandleEvent(WerkgeverGeregistreerd e)
         {
-            using (IDocumentSession session = _documentStore.OpenSession())
-            {
-                Werkgever werkgever = _werkgeverGeregistreerdToWerkgeverMapper.Map<Werkgever>(e);
-                session.Store(werkgever);
-                session.SaveChanges();
-            }
+            Werkgever werkgever = _werkgeverGeregistreerdToWerkgeverMapper.Map<Werkgever>(e);
+            _repo.RegistreerWerkgever(werkgever);
             return true;
         }
 
@@ -108,20 +83,23 @@ namespace PensioenSysteem.UI.WerkgeverBeheer
         {
             this.werkgeverBindingSource.SuspendBinding();
             this.werkgeverBindingSource.List.Clear();
-
-            using (IDocumentSession session = _documentStore.OpenSession())
+            foreach (Werkgever werkgever in _repo.RaadpleegWerkgevers())
             {
-                List<Werkgever> werkgevers = session
-                    .Query<Werkgever>()
-                    .Customize(x => x.WaitForNonStaleResultsAsOfNow()) // wait for any pending index udpates
-                    .ToList();
-                foreach (Werkgever werkgever in werkgevers)
-                {
-                    this.werkgeverBindingSource.List.Add(werkgever);
-                }
+                this.werkgeverBindingSource.List.Add(werkgever);
             }
-
             this.werkgeverBindingSource.ResumeBinding();
+        }
+
+        private void InitializeMappers()
+        {
+            var config = new MapperConfiguration(cfg =>
+                cfg.CreateMap<WerkgeverGeregistreerd, Werkgever>()
+                    .ForMember(dest => dest.VestigingsAdresStraat, opt => opt.MapFrom(src => src.Straat))
+                    .ForMember(dest => dest.VestigingsAdresHuisnummer, opt => opt.MapFrom(src => src.Huisnummer))
+                    .ForMember(dest => dest.VestigingsAdresHuisnummerToevoeging, opt => opt.MapFrom(src => src.HuisnummerToevoeging))
+                    .ForMember(dest => dest.VestigingsAdresPostcode, opt => opt.MapFrom(src => src.Postcode))
+                    .ForMember(dest => dest.VestigingsAdresPlaats, opt => opt.MapFrom(src => src.Plaats)));
+            _werkgeverGeregistreerdToWerkgeverMapper = config.CreateMapper();
         }
     }
 }

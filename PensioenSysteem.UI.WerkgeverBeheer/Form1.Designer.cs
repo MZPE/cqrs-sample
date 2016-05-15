@@ -30,12 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.werkgeverBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.werkgeverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.recordCountStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.versionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nummerDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -47,6 +41,12 @@
             this.vestigingsAdresHuisnummerToevoegingDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vestigingsAdresPostcodeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vestigingsAdresPlaatsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.werkgeverBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.werkgeverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.recordCountStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.werkgeverBindingSource)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -79,52 +79,6 @@
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.Size = new System.Drawing.Size(853, 371);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // werkgeverBindingSource
-            // 
-            this.werkgeverBindingSource.DataSource = typeof(PensioenSysteem.UI.WerkgeverBeheer.Model.Werkgever);
-            this.werkgeverBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.werkgeverBindingSource_ListChanged);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.werkgeverToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(853, 24);
-            this.menuStrip1.TabIndex = 1;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // werkgeverToolStripMenuItem
-            // 
-            this.werkgeverToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.refreshToolStripMenuItem});
-            this.werkgeverToolStripMenuItem.Name = "werkgeverToolStripMenuItem";
-            this.werkgeverToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
-            this.werkgeverToolStripMenuItem.Text = "&Werkgever";
-            // 
-            // refreshToolStripMenuItem
-            // 
-            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
-            this.refreshToolStripMenuItem.Text = "&Refresh";
-            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.recordCountStatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 395);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(853, 22);
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // recordCountStatusLabel
-            // 
-            this.recordCountStatusLabel.Name = "recordCountStatusLabel";
-            this.recordCountStatusLabel.Size = new System.Drawing.Size(82, 17);
-            this.recordCountStatusLabel.Text = "Aantal items : ";
             // 
             // idDataGridViewTextBoxColumn
             // 
@@ -214,6 +168,52 @@
             this.vestigingsAdresPlaatsDataGridViewTextBoxColumn.ReadOnly = true;
             this.vestigingsAdresPlaatsDataGridViewTextBoxColumn.Width = 136;
             // 
+            // werkgeverBindingSource
+            // 
+            this.werkgeverBindingSource.DataSource = typeof(PensioenSysteem.UI.WerkgeverBeheer.Model.Werkgever);
+            this.werkgeverBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.werkgeverBindingSource_ListChanged);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.werkgeverToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(853, 24);
+            this.menuStrip1.TabIndex = 1;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // werkgeverToolStripMenuItem
+            // 
+            this.werkgeverToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.refreshToolStripMenuItem});
+            this.werkgeverToolStripMenuItem.Name = "werkgeverToolStripMenuItem";
+            this.werkgeverToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
+            this.werkgeverToolStripMenuItem.Text = "&Werkgever";
+            // 
+            // refreshToolStripMenuItem
+            // 
+            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.refreshToolStripMenuItem.Text = "&Refresh";
+            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.recordCountStatusLabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 395);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(853, 22);
+            this.statusStrip1.TabIndex = 2;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // recordCountStatusLabel
+            // 
+            this.recordCountStatusLabel.Name = "recordCountStatusLabel";
+            this.recordCountStatusLabel.Size = new System.Drawing.Size(82, 17);
+            this.recordCountStatusLabel.Text = "Aantal items : ";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -224,7 +224,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "Werkgever Beheer";
+            this.Text = "Werkgever Beheer (RavenDB on http://localhost:9004)";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

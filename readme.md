@@ -296,6 +296,18 @@ Binnen de applicatie wordt gebruikgemaakt van 3 folders:
     * Application.Deelnemer
     * Application.Werkgever
     * Application.Arbeidsverhouding
+
+**RavenDB**
+De RavenDB databases werken allemaal in embedded mode en draaien in het proces van 
+de verschillende applicaties. Voor deze databases is ook HTTP access geactiveerd. 
+Dat betekent dat elke database kan worden ingezien door naar de desbetreffende URL 
+te browsen:
+
+* PensioenSysteem.Application.ProcesManagers: [http://localhost:9000](http://localhost:9000)
+* PensioenSysteem.Application.Correspondentie: [http://localhost:9001](http://localhost:9001)
+* PensioenSysteem.UI.ArbeidsverhoudingBeheer: [http://localhost:9002](http://localhost:9002)
+* PensioenSysteem.UI.DeelnemerBeheer: [http://localhost:9003](http://localhost:9003)
+* PensioenSysteem.UI.WerkgeverBeheer: [http://localhost:9004](http://localhost:9004)
  
 Test Handleiding
 ----------------

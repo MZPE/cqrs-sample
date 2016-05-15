@@ -3,6 +3,7 @@ using PensioenSysteem.Application.Correspondentie.Model;
 using PensioenSysteem.Domain.Messages.Deelnemer.Events;
 using Raven.Client;
 using Raven.Client.Embedded;
+using Raven.Database.Server;
 using System;
 
 namespace PensioenSysteem.Application.Correspondentie
@@ -47,11 +48,15 @@ namespace PensioenSysteem.Application.Correspondentie
 
         private void InitializeDatastore()
         {
+            NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(9001);
             _documentStore = new EmbeddableDocumentStore
             {
-                DefaultDatabase = "Correspondentie"
+                DefaultDatabase = "Correspondentie",
+                UseEmbeddedHttpServer = true
             };
             _documentStore.Initialize();
+
+            Console.WriteLine("RavenDB Studio on http://localhost:9001");
         }
 
         private void InitializeMappers()

@@ -16,13 +16,14 @@ namespace PensioenSysteem.UI.DeelnemerBeheer
     public partial class Form1 : Form
     {
         private RabbitMQDomainEventHandler _eventHandler;
-        private EmbeddableDocumentStore _documentStore;
+        private DeelnemerRepository _repo;
         private IMapper _deelnemerGeregistreerdToDeelnemerMapper;
+        private IMapper _deelnemerVerhuisdToVerhuizingMapper;
 
         public Form1()
         {
             InitializeComponent();
-            InitializeDatastore();
+            _repo = new DeelnemerRepository();
             InitializeMappers();
         }
 
@@ -60,35 +61,15 @@ namespace PensioenSysteem.UI.DeelnemerBeheer
 
         private bool HandleEvent(DeelnemerGeregistreerd e)
         {
-            using (IDocumentSession session = _documentStore.OpenSession()) 
-            {
-                Deelnemer deelnemer = _deelnemerGeregistreerdToDeelnemerMapper.Map<Deelnemer>(e);
-                session.Store(deelnemer); 
-                session.SaveChanges(); 
-            }
+            Deelnemer deelnemer = _deelnemerGeregistreerdToDeelnemerMapper.Map<Deelnemer>(e);
+            _repo.RegistreerDeelnemer(deelnemer);
             return true;
         }
 
         private bool HandleEvent(DeelnemerVerhuisd e)
         {
-            using (IDocumentSession session = _documentStore.OpenSession())
-            {
-                Deelnemer deelnemer = session.Load<Deelnemer>($"deelnemers/{e.Id.ToString("D")}");
-
-                if (deelnemer != null)
-                {
-                    deelnemer.WoonAdresStraat = e.Straat;
-                    deelnemer.WoonAdresHuisnummer = e.Huisnummer;
-                    deelnemer.WoonAdresHuisnummerToevoeging = e.HuisnummerToevoeging;
-                    deelnemer.WoonAdresPostcode = e.Postcode;
-                    deelnemer.WoonAdresPlaats = e.Plaats;
-                    session.SaveChanges();
-                }
-                else
-                {
-                    // TODO: handle this situation
-                }
-            }
+            Verhuizing verhuizing = _deelnemerVerhuisdToVerhuizingMapper.Map<Verhuizing>(e);
+            _repo.RegistreerDeelnemerVerhuizing(verhuizing);
             return true;
         }
 
@@ -97,10 +78,6 @@ namespace PensioenSysteem.UI.DeelnemerBeheer
             if (_eventHandler != null)
             {
                 _eventHandler.Stop();
-            }
-            if (_documentStore != null)
-            {
-                _documentStore.Dispose();
             }
         }
 
@@ -130,29 +107,11 @@ namespace PensioenSysteem.UI.DeelnemerBeheer
         {
             this.deelnemerBindingSource.SuspendBinding();
             this.deelnemerBindingSource.List.Clear();
-            
-            using (IDocumentSession session = _documentStore.OpenSession())
+            foreach (Deelnemer deelnemer in _repo.RaadpleegDeelnemers())
             {
-                List<Deelnemer> deelnemers = session
-                    .Query<Deelnemer>()
-                    .Customize(x => x.WaitForNonStaleResultsAsOfNow()) // wait for any pending index udpates
-                    .ToList();
-                foreach (Deelnemer deelnemer in deelnemers)
-                {
-                    this.deelnemerBindingSource.List.Add(deelnemer);
-                }
+                this.deelnemerBindingSource.List.Add(deelnemer);
             }
-
             this.deelnemerBindingSource.ResumeBinding();
-        }
-
-        private void InitializeDatastore()
-        {
-            _documentStore = new EmbeddableDocumentStore
-            {
-                DefaultDatabase = "DeelnemerBeheer"
-            };
-            _documentStore.Initialize();
         }
 
         private void InitializeMappers()
@@ -165,6 +124,9 @@ namespace PensioenSysteem.UI.DeelnemerBeheer
                     .ForMember(dest => dest.WoonAdresPostcode, opt => opt.MapFrom(src => src.Postcode))
                     .ForMember(dest => dest.WoonAdresPlaats, opt => opt.MapFrom(src => src.Plaats)));
             _deelnemerGeregistreerdToDeelnemerMapper = config.CreateMapper();
+
+            config = new MapperConfiguration(cfg => cfg.CreateMap<DeelnemerVerhuisd, Verhuizing>());
+            _deelnemerVerhuisdToVerhuizingMapper = config.CreateMapper();
         }
     }
 }

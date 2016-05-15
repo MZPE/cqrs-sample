@@ -16,13 +16,13 @@ namespace PensioenSysteem.UI.ArbeidsverhoudingBeheer
     public partial class Form1 : Form
     {
         private RabbitMQDomainEventHandler _eventHandler;
-        private EmbeddableDocumentStore _documentStore;
+        private ArbeidsverhoudingRepository _repo;
         private IMapper _arbeidsverhoudingGeregistreerdToArbeidsverhoudingMapper;
 
         public Form1()
         {
             InitializeComponent();
-            InitializeDatastore();
+            _repo = new ArbeidsverhoudingRepository();
             InitializeMappers();
         }
 
@@ -56,13 +56,9 @@ namespace PensioenSysteem.UI.ArbeidsverhoudingBeheer
 
         private bool HandleEvent(ArbeidsverhoudingGeregistreerd e)
         {
-            using (IDocumentSession session = _documentStore.OpenSession())
-            {
-                Arbeidsverhouding arbeidsverhouding = 
-                    _arbeidsverhoudingGeregistreerdToArbeidsverhoudingMapper.Map<Arbeidsverhouding>(e);
-                session.Store(arbeidsverhouding);
-                session.SaveChanges();
-            }
+            Arbeidsverhouding arbeidsverhouding =
+                _arbeidsverhoudingGeregistreerdToArbeidsverhoudingMapper.Map<Arbeidsverhouding>(e);
+            _repo.RegistreerArbeidsverhouding(arbeidsverhouding);
             return true;
         }
 
@@ -88,29 +84,11 @@ namespace PensioenSysteem.UI.ArbeidsverhoudingBeheer
         {
             this.arbeidsverhoudingBindingSource.SuspendBinding();
             this.arbeidsverhoudingBindingSource.List.Clear();
-
-            using (IDocumentSession session = _documentStore.OpenSession())
+            foreach (Arbeidsverhouding arbeidsverhouding in _repo.RaadpleegArbeidsverhoudingen())
             {
-                List<Arbeidsverhouding> arbeidsverhoudingen = session
-                    .Query<Arbeidsverhouding>()
-                    .Customize(x => x.WaitForNonStaleResultsAsOfNow()) // wait for any pending index udpates
-                    .ToList();
-                foreach (Arbeidsverhouding arbeidsverhouding in arbeidsverhoudingen)
-                {
-                    this.arbeidsverhoudingBindingSource.List.Add(arbeidsverhouding);
-                }
+                this.arbeidsverhoudingBindingSource.List.Add(arbeidsverhouding);
             }
-
             this.arbeidsverhoudingBindingSource.ResumeBinding();
-        }
-
-        private void InitializeDatastore()
-        {
-            _documentStore = new EmbeddableDocumentStore
-            {
-                DefaultDatabase = "ArbeidsverhoudingBeheer"
-            };
-            _documentStore.Initialize();
         }
 
         private void InitializeMappers()
