@@ -43,7 +43,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PensioenSysteem.Application
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PensioenSysteem.Domain.Messages", "PensioenSysteem.Domain.Messages\PensioenSysteem.Domain.Messages.csproj", "{AF7601BD-8216-4C23-982E-ED27B59B026C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PensioeneSysteem.Database", "PensioeneSysteem.Database\PensioeneSysteem.Database.csproj", "{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PensioenSysteem.Database", "PensioenSysteem.Database\PensioenSysteem.Database.csproj", "{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

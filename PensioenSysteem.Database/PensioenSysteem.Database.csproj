@@ -7,8 +7,8 @@
     <ProjectGuid>{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PensioeneSysteem.Database</RootNamespace>
-    <AssemblyName>PensioeneSysteem.Database</AssemblyName>
+    <RootNamespace>PensioenSysteem.Database</RootNamespace>
+    <AssemblyName>PensioenSysteem.Database</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

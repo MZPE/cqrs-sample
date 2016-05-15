@@ -297,7 +297,7 @@ Binnen de applicatie wordt gebruikgemaakt van 3 folders:
     * Application.Werkgever
     * Application.Arbeidsverhouding
 
-**RavenDB**
+**RavenDB**  
 Het project PensioenSysteem.Database bevat een link naar het RavenDB.Server NuGet 
 package. Hierdoor wordt een RavenDB server package gedownload. Door dit project te 
 starten, wordt de database server gestart. 

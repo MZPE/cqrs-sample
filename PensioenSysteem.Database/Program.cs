@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PensioeneSysteem.Database
+namespace PensioenSysteem.Database
 {
     class Program
     {
