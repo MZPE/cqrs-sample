@@ -234,7 +234,7 @@ De volgende producten en frameworks zijn ingezet binnen de applicatie:
 * ASP.NET Web API Client - voor het aanroepen van de REST API's.
 * Newtonsoft JSon.NET - voor de serializatie van gegevens naar JSON.
 * RabbitMQ - voor het publiceren van events.
-* RavenDB - embedded document-database voor het opslaan van gegevens voor de 
+* RavenDB - document-database voor het opslaan van gegevens voor de 
   readmodels van de verschillende onderdelen.
 * PDFSharp - voor het genereren van brieven.
 
@@ -298,16 +298,11 @@ Binnen de applicatie wordt gebruikgemaakt van 3 folders:
     * Application.Arbeidsverhouding
 
 **RavenDB**
-De RavenDB databases werken allemaal in embedded mode en draaien in het proces van 
-de verschillende applicaties. Voor deze databases is ook HTTP access geactiveerd. 
-Dat betekent dat elke database kan worden ingezien door naar de desbetreffende URL 
-te browsen:
+Het project PensioenSysteem.Database bevat een link naar het RavenDB.Server NuGet 
+package. Hierdoor wordt een RavenDB server package gedownload. Door dit project te 
+starten, wordt de database server gestart. 
 
-* PensioenSysteem.Application.ProcesManagers: [http://localhost:9000](http://localhost:9000)
-* PensioenSysteem.Application.Correspondentie: [http://localhost:9001](http://localhost:9001)
-* PensioenSysteem.UI.ArbeidsverhoudingBeheer: [http://localhost:9002](http://localhost:9002)
-* PensioenSysteem.UI.DeelnemerBeheer: [http://localhost:9003](http://localhost:9003)
-* PensioenSysteem.UI.WerkgeverBeheer: [http://localhost:9004](http://localhost:9004)
+De management portal van RavenDB is te benaderen op: http://localhost:8080.
  
 Test Handleiding
 ----------------

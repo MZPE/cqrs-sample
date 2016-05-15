@@ -3,12 +3,9 @@ using Newtonsoft.Json;
 using PensioenSysteem.Domain.Messages.Werkgever.Events;
 using PensioenSysteem.Infrastructure;
 using PensioenSysteem.UI.WerkgeverBeheer.Model;
-using Raven.Client;
-using Raven.Client.Embedded;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace PensioenSysteem.UI.WerkgeverBeheer
@@ -22,8 +19,8 @@ namespace PensioenSysteem.UI.WerkgeverBeheer
         public Form1()
         {
             InitializeComponent();
-            _repo = new WerkgeverRepository();
             InitializeMappers();
+            _repo = new WerkgeverRepository();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -82,11 +79,7 @@ namespace PensioenSysteem.UI.WerkgeverBeheer
         private void UpdateList()
         {
             this.werkgeverBindingSource.SuspendBinding();
-            this.werkgeverBindingSource.List.Clear();
-            foreach (Werkgever werkgever in _repo.RaadpleegWerkgevers())
-            {
-                this.werkgeverBindingSource.List.Add(werkgever);
-            }
+            this.werkgeverBindingSource.DataSource = _repo.RaadpleegWerkgevers();
             this.werkgeverBindingSource.ResumeBinding();
         }
 

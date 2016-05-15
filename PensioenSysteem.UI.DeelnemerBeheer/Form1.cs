@@ -2,13 +2,9 @@
 using PensioenSysteem.Infrastructure;
 using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Forms;
-using Raven.Client.Embedded;
 using PensioenSysteem.UI.DeelnemerBeheer.Model;
-using Raven.Client;
 using AutoMapper;
-using System.Collections.Generic;
 using PensioenSysteem.Domain.Messages.Deelnemer.Events;
 
 namespace PensioenSysteem.UI.DeelnemerBeheer
@@ -106,11 +102,7 @@ namespace PensioenSysteem.UI.DeelnemerBeheer
         private void UpdateList()
         {
             this.deelnemerBindingSource.SuspendBinding();
-            this.deelnemerBindingSource.List.Clear();
-            foreach (Deelnemer deelnemer in _repo.RaadpleegDeelnemers())
-            {
-                this.deelnemerBindingSource.List.Add(deelnemer);
-            }
+            this.deelnemerBindingSource.DataSource = _repo.RaadpleegDeelnemers();
             this.deelnemerBindingSource.ResumeBinding();
         }
 

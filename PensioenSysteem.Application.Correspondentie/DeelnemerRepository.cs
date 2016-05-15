@@ -2,15 +2,14 @@
 using PensioenSysteem.Application.Correspondentie.Model;
 using PensioenSysteem.Domain.Messages.Deelnemer.Events;
 using Raven.Client;
-using Raven.Client.Embedded;
-using Raven.Database.Server;
+using Raven.Client.Document;
 using System;
 
 namespace PensioenSysteem.Application.Correspondentie
 {
     internal class DeelnemerRepository
     {
-        private EmbeddableDocumentStore _documentStore;
+        private DocumentStore _documentStore;
         private IMapper _deelnemerGeregistreerdToDeelnemerMapper;
 
         /// <summary>
@@ -48,15 +47,12 @@ namespace PensioenSysteem.Application.Correspondentie
 
         private void InitializeDatastore()
         {
-            NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(9001);
-            _documentStore = new EmbeddableDocumentStore
+            _documentStore = new DocumentStore
             {
                 DefaultDatabase = "Correspondentie",
-                UseEmbeddedHttpServer = true
+                Url = "http://localhost:8080"                
             };
             _documentStore.Initialize();
-
-            Console.WriteLine("RavenDB Studio on http://localhost:9001");
         }
 
         private void InitializeMappers()

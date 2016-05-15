@@ -1,7 +1,6 @@
 ﻿using PensioenSysteem.UI.WerkgeverBeheer.Model;
 using Raven.Client;
-using Raven.Client.Embedded;
-using Raven.Database.Server;
+using Raven.Client.Document;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +8,7 @@ namespace PensioenSysteem.UI.WerkgeverBeheer
 {
     internal class WerkgeverRepository
     {
-        private EmbeddableDocumentStore _documentStore;
+        private DocumentStore _documentStore;
 
         public WerkgeverRepository()
         {
@@ -39,11 +38,10 @@ namespace PensioenSysteem.UI.WerkgeverBeheer
 
         private void InitializeDatastore()
         {
-            NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(9004);
-            _documentStore = new EmbeddableDocumentStore
+            _documentStore = new DocumentStore
             {
                 DefaultDatabase = "WerkgeverBeheer",
-                UseEmbeddedHttpServer = true
+                Url = "http://localhost:8080"
             };
             _documentStore.Initialize();
         }

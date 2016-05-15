@@ -1,9 +1,6 @@
-﻿using PensioenSysteem.Domain.Messages.Deelnemer.Events;
-using PensioenSysteem.UI.DeelnemerBeheer.Model;
+﻿using PensioenSysteem.UI.DeelnemerBeheer.Model;
 using Raven.Client;
-using Raven.Client.Embedded;
-using Raven.Database.Server;
-using System;
+using Raven.Client.Document;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +8,7 @@ namespace PensioenSysteem.UI.DeelnemerBeheer
 {
     internal class DeelnemerRepository
     {
-        private EmbeddableDocumentStore _documentStore;
+        private DocumentStore _documentStore;
 
         public DeelnemerRepository()
         {
@@ -46,6 +43,7 @@ namespace PensioenSysteem.UI.DeelnemerBeheer
                 Deelnemer deelnemer = session.Load<Deelnemer>($"deelnemers/{verhuizing.Id.ToString("D")}");
                 if (deelnemer != null)
                 {
+                    deelnemer.Version = verhuizing.Version;
                     deelnemer.WoonAdresStraat = verhuizing.Straat;
                     deelnemer.WoonAdresHuisnummer = verhuizing.Huisnummer;
                     deelnemer.WoonAdresHuisnummerToevoeging = verhuizing.HuisnummerToevoeging;
@@ -62,11 +60,10 @@ namespace PensioenSysteem.UI.DeelnemerBeheer
 
         private void InitializeDatastore()
         {
-            NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(9003);
-            _documentStore = new EmbeddableDocumentStore
+            _documentStore = new DocumentStore
             {
                 DefaultDatabase = "DeelnemerBeheer",
-                UseEmbeddedHttpServer = true
+                Url = "http://localhost:8080"
             };
             _documentStore.Initialize();
         }

@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PensioenSysteem.Application
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PensioenSysteem.Domain.Messages", "PensioenSysteem.Domain.Messages\PensioenSysteem.Domain.Messages.csproj", "{AF7601BD-8216-4C23-982E-ED27B59B026C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PensioeneSysteem.Database", "PensioeneSysteem.Database\PensioeneSysteem.Database.csproj", "{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -207,6 +209,18 @@ Global
 		{AF7601BD-8216-4C23-982E-ED27B59B026C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AF7601BD-8216-4C23-982E-ED27B59B026C}.Release|x86.ActiveCfg = Release|Any CPU
 		{AF7601BD-8216-4C23-982E-ED27B59B026C}.Release|x86.Build.0 = Release|Any CPU
+		{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}.Debug|x86.Build.0 = Debug|Any CPU
+		{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}.Release|x86.ActiveCfg = Release|Any CPU
+		{837364E6-5265-41B2-AE98-6F7C7FF1E5B6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

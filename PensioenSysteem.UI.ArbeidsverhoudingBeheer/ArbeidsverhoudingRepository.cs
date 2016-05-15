@@ -1,8 +1,6 @@
 ﻿using PensioenSysteem.UI.ArbeidsverhoudingBeheer.Model;
 using Raven.Client;
-using Raven.Client.Embedded;
-using Raven.Database.Server;
-using System;
+using Raven.Client.Document;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +8,7 @@ namespace PensioenSysteem.UI.ArbeidsverhoudingBeheer
 {
     internal class ArbeidsverhoudingRepository
     {
-        private EmbeddableDocumentStore _documentStore;
+        private DocumentStore _documentStore;
 
         public ArbeidsverhoudingRepository()
         {
@@ -40,11 +38,10 @@ namespace PensioenSysteem.UI.ArbeidsverhoudingBeheer
 
         private void InitializeDatastore()
         {
-            NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(9002);
-            _documentStore = new EmbeddableDocumentStore
+            _documentStore = new DocumentStore
             {
                 DefaultDatabase = "ArbeidsverhoudingBeheer",
-                UseEmbeddedHttpServer = true
+                Url = "http://localhost:8080"
             };
             _documentStore.Initialize();
         }

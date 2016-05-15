@@ -3,12 +3,8 @@ using Newtonsoft.Json;
 using PensioenSysteem.Domain.Messages.Arbeidsverhouding.Events;
 using PensioenSysteem.Infrastructure;
 using PensioenSysteem.UI.ArbeidsverhoudingBeheer.Model;
-using Raven.Client;
-using Raven.Client.Embedded;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace PensioenSysteem.UI.ArbeidsverhoudingBeheer
@@ -83,11 +79,7 @@ namespace PensioenSysteem.UI.ArbeidsverhoudingBeheer
         private void UpdateList()
         {
             this.arbeidsverhoudingBindingSource.SuspendBinding();
-            this.arbeidsverhoudingBindingSource.List.Clear();
-            foreach (Arbeidsverhouding arbeidsverhouding in _repo.RaadpleegArbeidsverhoudingen())
-            {
-                this.arbeidsverhoudingBindingSource.List.Add(arbeidsverhouding);
-            }
+            this.arbeidsverhoudingBindingSource.DataSource = _repo.RaadpleegArbeidsverhoudingen();
             this.arbeidsverhoudingBindingSource.ResumeBinding();
         }
 

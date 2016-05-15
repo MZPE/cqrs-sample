@@ -9,6 +9,7 @@ namespace PensioenSysteem.UI.DeelnemerBeheer.Model
     internal class Verhuizing
     {
         public Guid Id { get; set; }
+        public int Version { get; set; }
         public string Straat { get; set; }
         public int Huisnummer { get; set; }
         public string HuisnummerToevoeging { get; set; }

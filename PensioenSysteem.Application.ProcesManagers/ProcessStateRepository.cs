@@ -1,18 +1,13 @@
 ﻿using PensioenSysteem.Application.ProcesManagers.Model;
 using Raven.Client;
-using Raven.Client.Embedded;
-using Raven.Database.Server;
+using Raven.Client.Document;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PensioenSysteem.Application.ProcesManagers
 {
     internal class ProcessStateRepository
     {
-        private EmbeddableDocumentStore _documentStore;
+        private DocumentStore _documentStore;
 
         public ProcessStateRepository()
         {
@@ -52,15 +47,12 @@ namespace PensioenSysteem.Application.ProcesManagers
 
         private void InitializeDatastore()
         {
-            NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(9000);
-            _documentStore = new EmbeddableDocumentStore
+            _documentStore = new DocumentStore
             {
                 DefaultDatabase = "ProcessState",
-                UseEmbeddedHttpServer = true
+                Url = "http://localhost:8080"
             };
             _documentStore.Initialize();
-
-            Console.WriteLine("RavenDB Studio on http://localhost:9000");
         }
     }
 }
