@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Dapper;
 using Newtonsoft.Json;
 using PensioenSysteem.Domain.Messages.Arbeidsverhouding.Events;
 using PensioenSysteem.Infrastructure;
@@ -9,8 +8,6 @@ using Raven.Client.Embedded;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Windows.Forms;
 
