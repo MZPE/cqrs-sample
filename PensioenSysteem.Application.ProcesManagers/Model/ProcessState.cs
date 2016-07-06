@@ -3,7 +3,7 @@ using System;
 
 namespace PensioenSysteem.Application.ProcesManagers.Model
 {
-    internal class ProcessState
+    public class ProcessState
     {
         public Guid Id { get; set; }
         public RegistreerAanmeldingCommand InitierendCommand { get; set; }

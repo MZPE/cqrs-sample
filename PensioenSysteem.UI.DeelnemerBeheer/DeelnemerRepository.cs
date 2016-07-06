@@ -1,71 +1,54 @@
-﻿using PensioenSysteem.UI.DeelnemerBeheer.Model;
-using Raven.Client;
-using Raven.Client.Document;
+﻿using LiteDB;
+using PensioenSysteem.UI.DeelnemerBeheer.Model;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace PensioenSysteem.UI.DeelnemerBeheer
 {
     internal class DeelnemerRepository
     {
-        private DocumentStore _documentStore;
+        private const string _databaseFolder = @"D:\PensioenSysteem\Databases\DeelnemerBeheer\";
+        private const string _databaseFile = _databaseFolder + @"DeelnemerBeheer.db";
 
         public DeelnemerRepository()
         {
-            InitializeDatastore();
+            Directory.CreateDirectory(_databaseFolder);
         }
 
         public void RegistreerDeelnemer(Deelnemer deelnemer)
         {
-            using (IDocumentSession session = _documentStore.OpenSession())
+            using (var db = new LiteDatabase(_databaseFile))
             {
-                session.Store(deelnemer);
-                session.SaveChanges();
+                var col = db.GetCollection<Deelnemer>("deelnemer");
+                col.Insert(deelnemer);
+                db.Commit();
             }
         }
 
         public IList<Deelnemer> RaadpleegDeelnemers()
         {
-            using (IDocumentSession session = _documentStore.OpenSession())
+            using (var db = new LiteDatabase(_databaseFile))
             {
-                List<Deelnemer> deelnemers = session
-                    .Query<Deelnemer>()
-                    .Customize(x => x.WaitForNonStaleResultsAsOfNow()) // wait for any pending index udpates
-                    .ToList();
-                return deelnemers;
+                var col = db.GetCollection<Deelnemer>("deelnemer");
+                return col.FindAll().ToList();
             }
         }
 
         public void RegistreerDeelnemerVerhuizing(Verhuizing verhuizing)
         {
-            using (IDocumentSession session = _documentStore.OpenSession())
+            using (var db = new LiteDatabase(_databaseFile))
             {
-                Deelnemer deelnemer = session.Load<Deelnemer>($"deelnemers/{verhuizing.Id.ToString("D")}");
-                if (deelnemer != null)
-                {
-                    deelnemer.Version = verhuizing.Version;
-                    deelnemer.WoonAdresStraat = verhuizing.Straat;
-                    deelnemer.WoonAdresHuisnummer = verhuizing.Huisnummer;
-                    deelnemer.WoonAdresHuisnummerToevoeging = verhuizing.HuisnummerToevoeging;
-                    deelnemer.WoonAdresPostcode = verhuizing.Postcode;
-                    deelnemer.WoonAdresPlaats = verhuizing.Plaats;
-                    session.SaveChanges();
-                }
-                else
-                {
-                    // TODO: handle this situation
-                }
+                var col = db.GetCollection<Deelnemer>("deelnemer");
+                Deelnemer deelnemer = col.FindById(verhuizing.Id);
+                deelnemer.WoonAdresStraat = verhuizing.Straat;
+                deelnemer.WoonAdresHuisnummer = verhuizing.Huisnummer;
+                deelnemer.WoonAdresHuisnummerToevoeging = verhuizing.HuisnummerToevoeging;
+                deelnemer.WoonAdresPostcode = verhuizing.Postcode;
+                deelnemer.WoonAdresPlaats = verhuizing.Plaats;
+                col.Update(deelnemer);
+                db.Commit();
             }
-        }
-
-        private void InitializeDatastore()
-        {
-            _documentStore = new DocumentStore
-            {
-                DefaultDatabase = "DeelnemerBeheer",
-                Url = "http://localhost:8080"
-            };
-            _documentStore.Initialize();
         }
     }
 }

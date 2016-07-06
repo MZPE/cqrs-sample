@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PensioenSysteem.UI.WerkgeverBeheer.Model
 {
-    internal class Werkgever
+    public class Werkgever
     {
         public Guid Id { get; set; }
         public int Version { get; set; }

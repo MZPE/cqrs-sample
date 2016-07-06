@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PensioenSysteem.UI.DeelnemerBeheer.Model
 {
-    internal class Deelnemer
+    public class Deelnemer
     {
         public Guid Id { get; set; }
         public int Version { get; set; }

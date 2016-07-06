@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PensioenSysteem.UI.ArbeidsverhoudingBeheer.Model
 {
-    internal class Arbeidsverhouding
+    public class Arbeidsverhouding
     {
         public Guid Id { get; set; }
         public int Version { get; set; }
