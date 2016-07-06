@@ -1,49 +1,38 @@
-﻿using PensioenSysteem.UI.ArbeidsverhoudingBeheer.Model;
-using Raven.Client;
-using Raven.Client.Document;
+﻿using LiteDB;
+using PensioenSysteem.UI.ArbeidsverhoudingBeheer.Model;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace PensioenSysteem.UI.ArbeidsverhoudingBeheer
 {
     internal class ArbeidsverhoudingRepository
     {
-        private DocumentStore _documentStore;
+        private const string _databaseFolder = @"D:\PensioenSysteem\Databases\ArbeidsverhoudingBeheer\";
+        private const string _databaseFile = _databaseFolder + @"ArbeidsverhoudingBeheer.db";
 
         public ArbeidsverhoudingRepository()
         {
-            InitializeDatastore();
+            Directory.CreateDirectory(_databaseFolder);
         }
 
         public void RegistreerArbeidsverhouding(Arbeidsverhouding arbeidsverhouding)
         {
-            using (IDocumentSession session = _documentStore.OpenSession())
+            using (var db = new LiteDatabase(_databaseFile))
             {
-                session.Store(arbeidsverhouding);
-                session.SaveChanges();
+                var col = db.GetCollection<Arbeidsverhouding>("arbeidsverhouding");
+                col.Insert(arbeidsverhouding);
+                db.Commit();
             }
         }
 
         public IList<Arbeidsverhouding> RaadpleegArbeidsverhoudingen()
         {
-            using (IDocumentSession session = _documentStore.OpenSession())
+            using (var db = new LiteDatabase(_databaseFile))
             {
-                List<Arbeidsverhouding> arbeidsverhoudingen = session
-                    .Query<Arbeidsverhouding>()
-                    .Customize(x => x.WaitForNonStaleResultsAsOfNow()) // wait for any pending index udpates
-                    .ToList();
-                return arbeidsverhoudingen;
+                var col = db.GetCollection<Arbeidsverhouding>("arbeidsverhouding");
+                return col.FindAll().ToList();
             }
-        }
-
-        private void InitializeDatastore()
-        {
-            _documentStore = new DocumentStore
-            {
-                DefaultDatabase = "ArbeidsverhoudingBeheer",
-                Url = "http://localhost:8080"
-            };
-            _documentStore.Initialize();
         }
     }
 }

@@ -1,49 +1,38 @@
-﻿using PensioenSysteem.UI.WerkgeverBeheer.Model;
-using Raven.Client;
-using Raven.Client.Document;
+﻿using LiteDB;
+using PensioenSysteem.UI.WerkgeverBeheer.Model;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace PensioenSysteem.UI.WerkgeverBeheer
 {
     internal class WerkgeverRepository
     {
-        private DocumentStore _documentStore;
+        private const string _databaseFolder = @"D:\PensioenSysteem\Databases\WerkgeverBeheer\";
+        private const string _databaseFile = _databaseFolder + @"WerkgeverBeheer.db";
 
         public WerkgeverRepository()
         {
-            InitializeDatastore();
+            Directory.CreateDirectory(_databaseFolder);
         }
 
         public void RegistreerWerkgever(Werkgever werkgever)
         {
-            using (IDocumentSession session = _documentStore.OpenSession())
+            using (var db = new LiteDatabase(_databaseFile))
             {
-                session.Store(werkgever);
-                session.SaveChanges();
+                var col = db.GetCollection<Werkgever>("werkgever");
+                col.Insert(werkgever);
+                db.Commit();
             }
         }
 
         public IList<Werkgever> RaadpleegWerkgevers()
         {
-            using (IDocumentSession session = _documentStore.OpenSession())
+            using (var db = new LiteDatabase(_databaseFile))
             {
-                List<Werkgever> werkgevers = session
-                    .Query<Werkgever>()
-                    .Customize(x => x.WaitForNonStaleResultsAsOfNow()) // wait for any pending index udpates
-                    .ToList();
-                return werkgevers;
+                var col = db.GetCollection<Werkgever>("werkgever");
+                return col.FindAll().ToList();
             }
-        }
-
-        private void InitializeDatastore()
-        {
-            _documentStore = new DocumentStore
-            {
-                DefaultDatabase = "WerkgeverBeheer",
-                Url = "http://localhost:8080"
-            };
-            _documentStore.Initialize();
         }
     }
 }

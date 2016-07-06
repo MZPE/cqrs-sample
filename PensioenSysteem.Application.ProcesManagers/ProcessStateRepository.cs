@@ -1,58 +1,52 @@
-﻿using PensioenSysteem.Application.ProcesManagers.Model;
-using Raven.Client;
-using Raven.Client.Document;
+﻿using LiteDB;
+using PensioenSysteem.Application.ProcesManagers.Model;
 using System;
+using System.IO;
 
 namespace PensioenSysteem.Application.ProcesManagers
 {
     internal class ProcessStateRepository
     {
-        private DocumentStore _documentStore;
+        private const string _databaseFolder = @"D:\PensioenSysteem\Databases\ProcessManagers\";
+        private const string _databaseFile = _databaseFolder + @"ProcessManagers.db";
 
         public ProcessStateRepository()
         {
-            InitializeDatastore();
+            Directory.CreateDirectory(_databaseFolder);
         }
 
         public void RegistreerProcessStart(ProcessState state)
         {
-            using (IDocumentSession session = _documentStore.OpenSession())
+            using (var db = new LiteDatabase(_databaseFile))
             {
-                session.Store(state);
-                session.SaveChanges();
+                var col = db.GetCollection<ProcessState>("processtate");
+                col.Insert(state);
+                db.Commit();
             }
         }
 
         public ProcessState RaadpleegProcessState(Guid correlationId)
         {
-            using (IDocumentSession session = _documentStore.OpenSession())
+            using (var db = new LiteDatabase(_databaseFile))
             {
-                ProcessState state = session.Load<ProcessState>($"processstates/{correlationId.ToString("D")}");
-                return state;
+                var col = db.GetCollection<ProcessState>("processtate");
+                return col.FindById(correlationId);
             }
         }
 
         public void UpdateProcessState(ProcessState state)
         {
-            using (IDocumentSession session = _documentStore.OpenSession())
+            using (var db = new LiteDatabase(_databaseFile))
             {
-                ProcessState storedState = session.Load<ProcessState>($"processstates/{state.Id.ToString("D")}");
+                var col = db.GetCollection<ProcessState>("processtate");
+                ProcessState storedState = col.FindById(state.Id);
                 storedState.DeelnemerNummer = state.DeelnemerNummer;
                 storedState.WerkgeverNummer = state.WerkgeverNummer;
                 storedState.Status = state.Status;
                 storedState.Foutmelding = state.Foutmelding;
-                session.SaveChanges();
+                col.Update(storedState);
+                db.Commit();
             }
-        }
-
-        private void InitializeDatastore()
-        {
-            _documentStore = new DocumentStore
-            {
-                DefaultDatabase = "ProcessState",
-                Url = "http://localhost:8080"
-            };
-            _documentStore.Initialize();
         }
     }
 }

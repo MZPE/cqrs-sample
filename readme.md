@@ -138,10 +138,10 @@ De applicatie bestaat uit de volgende componenten:
 **Presentation laag**
 
 * PensioenSysteem.UI.DeelnemerBeheer - Bevat een UI voor het inzien en beheren 
-  van deelnemer gegevens. De gegevens worden gelezen uit een RavenDB 
-  database. Deze database wordt gevuld door events die te maken hebben met 
-  deelnemers te ontvangen en op basis daarvan de database bij te werken. Deze 
-  eventsubscriber leeft in de UI applicatie (hiervoor wordt de 
+  van deelnemer gegevens. De gegevens worden gelezen uit een lokale database. 
+  Deze database wordt gevuld door events die te maken hebben met deelnemers te 
+  ontvangen en op basis daarvan de database bij te werken. Deze eventsubscriber 
+  leeft in de UI applicatie (hiervoor wordt de 
   Infrastructure.RabbitMQDomainEventHandler class gebruikt (zie componenten in 
   de Infrastructure laag)).  
 * PensioenSysteem.UI.WerkgeverBeheer - Vergelijkbaar met de bovengenoemde UI 
@@ -198,7 +198,8 @@ implementatie bestaat uit het simpelweg serialiseren van de event-data en deze
 **Proces managers**  
 In de demo applicatie bevindt zich slechts 1 procesmanager: 
 Application.ProcesManagers.RegistrerenAanmelding. Dit is een demo implementatie 
-van een procesmanager. Persistence is geïmplementeerd middels een tabel in RavenDB. 
+van een procesmanager. Persistence is geïmplementeerd middels een tabel in een 
+database. 
 Dus als het proces crasht, blijft de administratie rondom de lopende 
 processen aanwezig en zullen events die nog in de queue staan voor nog lopende 
 worden afgehandeld zodra de procesmanager weer wordt gestart.
@@ -234,7 +235,7 @@ De volgende producten en frameworks zijn ingezet binnen de applicatie:
 * ASP.NET Web API Client - voor het aanroepen van de REST API's.
 * Newtonsoft JSon.NET - voor de serializatie van gegevens naar JSON.
 * RabbitMQ - voor het publiceren van events.
-* RavenDB - document-database voor het opslaan van gegevens voor de 
+* LiteDB - embedded NoSQL document-database voor het opslaan van gegevens voor de 
   readmodels van de verschillende onderdelen.
 * PDFSharp - voor het genereren van brieven.
 
@@ -296,13 +297,6 @@ Binnen de applicatie wordt gebruikgemaakt van 3 folders:
     * Application.Deelnemer
     * Application.Werkgever
     * Application.Arbeidsverhouding
-
-**RavenDB**  
-Het project PensioenSysteem.Database bevat een link naar het RavenDB.Server NuGet 
-package. Hierdoor wordt een RavenDB server package gedownload. Door dit project te 
-starten, wordt de database server gestart. 
-
-De management portal van RavenDB is te benaderen op: http://localhost:8080.
  
 Test Handleiding
 ----------------

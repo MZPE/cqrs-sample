@@ -1,23 +1,24 @@
 ﻿using AutoMapper;
+using LiteDB;
 using PensioenSysteem.Application.Correspondentie.Model;
 using PensioenSysteem.Domain.Messages.Deelnemer.Events;
-using Raven.Client;
-using Raven.Client.Document;
 using System;
+using System.IO;
 
 namespace PensioenSysteem.Application.Correspondentie
 {
     internal class DeelnemerRepository
     {
-        private DocumentStore _documentStore;
         private IMapper _deelnemerGeregistreerdToDeelnemerMapper;
+        private const string _databaseFolder = @"D:\PensioenSysteem\Databases\Correspondentie\";
+        private const string _databaseFile = _databaseFolder + @"Correspondentie.db";
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         public DeelnemerRepository()
         {
-            InitializeDatastore();
+            Directory.CreateDirectory(_databaseFolder);
             InitializeMappers();
         }
 
@@ -29,30 +30,22 @@ namespace PensioenSysteem.Application.Correspondentie
 
         public void RegistreerDeelnemer(Deelnemer deelnemer)
         {
-            using (IDocumentSession session = _documentStore.OpenSession())
+            using (var db = new LiteDatabase(_databaseFile))
             {
-                session.Store(deelnemer);
-                session.SaveChanges();
+                var col = db.GetCollection<Deelnemer>("deelnemer");
+                col.Insert(deelnemer);
+                db.Commit();
             }
         }
 
         public Deelnemer RaadpleegDeelnemer(Guid id)
         {
-            using (IDocumentSession session = _documentStore.OpenSession())
+            using (var db = new LiteDatabase(_databaseFile))
             {
-                Deelnemer deelnemer = session.Load<Deelnemer>($"deelnemers/{id.ToString("D")}");
+                var col = db.GetCollection<Deelnemer>("deelnemer");
+                var deelnemer = col.FindById(id);
                 return deelnemer;
             }
-        }
-
-        private void InitializeDatastore()
-        {
-            _documentStore = new DocumentStore
-            {
-                DefaultDatabase = "Correspondentie",
-                Url = "http://localhost:8080"                
-            };
-            _documentStore.Initialize();
         }
 
         private void InitializeMappers()
